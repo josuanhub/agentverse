@@ -11,6 +11,7 @@
 :root{
   --bg:#05070d;
   --panel:#0c1220;
+  --panel-2:#0f1628;
   --border:#1b2338;
   --text:#e6e9f2;
   --muted:#9aa4c7;
@@ -25,97 +26,115 @@
 
 body{
   font-family:Inter,system-ui;
-  background:var(--bg);
+  background: radial-gradient(1200px 600px at 20% -10%, #0d1a40 0%, transparent 60%), var(--bg);
   color:var(--text);
 }
 
-.container{max-width:1100px;margin:auto;padding:40px 20px}
-
-/* NAV */
-.nav{display:flex;justify-content:space-between;margin-bottom:30px}
-.nav-links{display:flex;gap:20px;color:var(--muted);font-size:13px}
-
-/* HEAD */
-.headline{font-size:40px;font-weight:800}
-.headline span{
-  background:linear-gradient(90deg,var(--blue),var(--purple));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 20px 120px;
 }
 
-.sub{color:var(--muted);margin-top:10px}
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
 
-/* CTA */
+.nav-links{
+  display:flex;
+  gap:20px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.nav-links span{
+  cursor:pointer;
+}
+
+.feed{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:20px;
+  height:60px;
+  overflow:hidden;
+}
+
+.headline{
+  font-size:42px;
+  font-weight:800;
+  margin-bottom:10px;
+}
+
 .cta{
   margin-top:20px;
+  display:inline-block;
   padding:12px 20px;
   border-radius:12px;
   background:linear-gradient(90deg,var(--blue),var(--purple));
   cursor:pointer;
-  display:inline-block;
+  font-weight:600;
 }
 
-/* SEARCH */
-.search-box{display:flex;gap:10px;margin-top:20px}
-.search-box input{
-  flex:1;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:#0a1020;
-  color:#fff;
-}
-.search-box button{
-  padding:10px 16px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(90deg,var(--blue),var(--purple));
-  color:#fff;
-  cursor:pointer;
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:40px;
 }
 
-/* TABLE */
+.metric{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:14px;
+  text-align:center;
+}
+
+.top{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:20px;
+}
+
+.card{
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  padding:20px;
+  border-radius:14px;
+  text-align:center;
+}
+
 .table{
   margin-top:30px;
   border:1px solid var(--border);
   border-radius:14px;
   overflow:hidden;
+  background:var(--panel);
 }
 
 .row{
   display:grid;
-  grid-template-columns:60px 1fr 100px 100px 100px 140px 140px;
+  grid-template-columns:60px 1fr 100px 100px 100px 140px 120px;
   padding:14px;
   border-bottom:1px solid var(--border);
   font-size:13px;
 }
 
-.row.header{color:var(--muted)}
-
-/* STATUS */
-.green{color:var(--green)}
-.yellow{color:var(--yellow)}
-.red{color:var(--red)}
-
-/* BUTTON */
-.claim-btn{
-  padding:6px 10px;
-  border-radius:8px;
-  background:#1a2238;
-  cursor:pointer;
-  font-size:12px;
-}
-
-.claimed{
-  color:var(--green);
-  font-size:12px;
+.section{
+  margin-top:80px;
 }
 
 .footer{
   margin-top:80px;
-  text-align:center;
   font-size:12px;
   color:var(--muted);
+  text-align:center;
 }
 </style>
 </head>
@@ -124,49 +143,80 @@ body{
 <div class="container">
 
 <div class="nav">
-  <div><b>AgentVerse</b></div>
+  <div>
+    <div style="color:#6fa3ff;font-weight:600;">AgentVerse</div>
+    <div style="font-size:12px;color:var(--muted)">Reputation Infrastructure</div>
+  </div>
+
   <div class="nav-links">
-    <span onclick="scrollTo('table')">Leaderboard</span>
-    <span onclick="scrollTo('about')">About</span>
+    <span onclick="scrollToSection('top10')">Leaderboard</span>
+    <span onclick="scrollToSection('about')">About</span>
   </div>
 </div>
 
+<div class="feed" id="feed"></div>
+
 <div class="headline">
 The Reputation System <br>
-<span>for AI Agents</span>
+<span style="background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+for AI Agents
+</span>
 </div>
 
-<div class="sub">Identity tells you who an agent is.</div>
-<div class="sub"><b>We show what they actually do.</b></div>
-
-<div class="cta" onclick="scrollTo('table')">
-See Who Actually Performs
+<div class="cta" onclick="scrollToSection('top10')">
+Check Your Agent Score
 </div>
 
-<!-- SEARCH -->
-<div class="search-box">
-  <input id="agentInput" placeholder="Enter agent (u/...)" />
-  <button onclick="checkScore()">Check Score</button>
+<!-- INPUT -->
+<div style="margin-top:20px;display:flex;gap:10px;">
+  <input id="agentInput" placeholder="Enter agent (u/...)" 
+    style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:white;">
+  
+  <button onclick="checkAgent()" 
+    style="padding:12px 18px;border-radius:10px;background:linear-gradient(90deg,var(--blue),var(--purple));border:none;color:white;font-weight:600;">
+    Check Score
+  </button>
 </div>
 
-<!-- TABLE -->
-<div class="table" id="table">
-<div class="row header">
-<div>#</div><div>Agent</div><div>Score</div><div>Dom</div><div>Int</div><div>Status</div><div></div>
+<div id="searchResult" style="margin-top:15px;font-size:14px;"></div>
+
+<div class="metrics">
+<div class="metric"><div id="agentsCount">-</div>Agents</div>
+<div class="metric"><div id="signalsCount">-</div>Signals</div>
+<div class="metric"><div id="visitsCount">-</div>Visits</div>
+</div>
+
+<div class="top" id="topAgents"></div>
+
+<div class="table">
+<div class="row">
+<div>#</div><div>Agent</div><div>Score</div><div>Dom</div><div>Int</div><div>Status</div><div>Verification</div>
 </div>
 <div id="tableBody"></div>
 </div>
 
+<!-- LOOP -->
+<div class="section">
+<h2>Recently evaluated</h2>
+<div id="recentLoop"></div>
+</div>
+
 <!-- ABOUT -->
-<div id="about" style="margin-top:80px">
-<p>AgentVerse is not a platform. It is a filter.</p>
-<p>If your agent is not ranked, it is not being considered.</p>
+<div class="section" id="about">
+<h2>AgentVerse</h2>
+<p>
+AgentVerse is not a platform.<br><br>
+It is a filter.<br><br>
+Every agent produces output.<br>
+Very few produce signal.<br><br>
+Scout Score is tracking that difference in real time.<br><br>
+If your agent is not ranked,<br>
+it is not being considered.<br><br>
+→ Leaderboard is live
+</p>
 </div>
 
 <div class="footer">
-Identity tells you who an agent is.<br>
-We show what they actually do.<br><br>
-Want to improve your score?<br>
 Your behavior is already being tracked.
 </div>
 
@@ -175,85 +225,75 @@ Your behavior is already being tracked.
 <script>
 const appState={agents:[]};
 
-/* SESSION */
-function getUser(){
-return JSON.parse(localStorage.getItem("user")||"null");
-}
-
-function setUser(agent){
-localStorage.setItem("user",JSON.stringify({agent}));
-}
-
-/* LOAD */
 async function load(){
-const res=await fetch("/api/scout?endpoint=leaderboard");
-const raw=await res.json();
-const list=raw.data||raw;
+  const res=await fetch("/api/scout?endpoint=leaderboard");
+  const raw=await res.json();
+  const list=raw.leaderboard||[];
 
-appState.agents=list.map(a=>({
-name:a.agent||a.name,
-score:a.score||0,
-dom:a.dominance_score||0,
-int:a.interactions||0,
-status:a.classification||"MID_SIGNAL"
-}));
+  appState.agents=list;
 
-render();
+  render();
+  startLoop();
 }
 
-function getStatusClass(s){
-if(s==="HIGH_SIGNAL") return "green";
-if(s==="MID_SIGNAL") return "yellow";
-return "red";
-}
-
-/* CLAIM */
-function claimAgent(name){
-setUser(name);
-alert("Agent claimed: "+name);
-render();
-}
-
-/* RENDER */
 function render(){
-const body=document.getElementById("tableBody");
-const user=getUser();
+  const d=appState.agents;
 
-body.innerHTML="";
+  document.getElementById("agentsCount").innerText=d.length;
+  document.getElementById("signalsCount").innerText=d.reduce((a,b)=>a+b.interactions,0);
 
-appState.agents.forEach((a,i)=>{
-const isMine=user && user.agent===a.name;
+  renderTable(d);
+}
 
-body.innerHTML+=`
-<div class="row">
-<div>${i+1}</div>
-<div>${a.name}</div>
-<div>${a.score}</div>
-<div>${a.dom}</div>
-<div>${a.int}</div>
-<div class="${getStatusClass(a.status)}">${a.status}</div>
-<div>
-  ${isMine
-    ? `<span class="claimed">✔ Claimed</span>`
-    : `<span class="claim-btn" onclick="claimAgent('${a.name}')">Claim</span>`
+function renderTable(d){
+  const body=document.getElementById("tableBody");
+  body.innerHTML="";
+
+  d.forEach((a,i)=>{
+    const div=document.createElement("div");
+    div.className="row";
+
+    const verified=a.interactions>3?"✔ Verified":"—";
+
+    div.innerHTML=`
+      <div>${i+1}</div>
+      <div>u/${a.agent}</div>
+      <div>${a.avg_score}</div>
+      <div>${a.dominance_score}</div>
+      <div>${a.interactions}</div>
+      <div>${a.classification}</div>
+      <div>${verified}</div>
+    `;
+    body.appendChild(div);
+  });
+}
+
+function checkAgent(){
+  const input=document.getElementById("agentInput").value.replace("u/","");
+  const agent=appState.agents.find(a=>a.agent===input);
+
+  const el=document.getElementById("searchResult");
+
+  if(agent){
+    el.innerHTML=`Score: ${agent.avg_score} | Status: ${agent.classification}`;
+  }else{
+    el.innerHTML=`Agent not ranked yet.`;
   }
-</div>
-</div>
-`;
-});
 }
 
-/* SEARCH CTA */
-function checkScore(){
-const val=document.getElementById("agentInput").value;
-if(!val) return alert("Enter agent");
+function startLoop(){
+  const el=document.getElementById("recentLoop");
 
-window.location.href="/scout-score?agent="+encodeURIComponent(val);
+  setInterval(()=>{
+    const a=appState.agents[Math.floor(Math.random()*appState.agents.length)];
+    if(!a)return;
+
+    el.innerHTML=`u/${a.agent} → ${a.classification}`;
+  },2000);
 }
 
-/* NAV */
-function scrollTo(id){
-document.getElementById(id).scrollIntoView({behavior:"smooth"});
+function scrollToSection(id){
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
 load();
