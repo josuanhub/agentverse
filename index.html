@@ -13,25 +13,28 @@ body {
   font-family: system-ui;
 }
 
-.glass {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(14px);
-}
-
 .gradient-text {
   background: linear-gradient(90deg,#4f8cff,#9f6bff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.glow {
-  box-shadow: 0 0 40px rgba(79,140,255,0.15);
-}
-
 .btn {
   background: linear-gradient(90deg,#4f8cff,#9f6bff);
-  padding: 12px 20px;
-  border-radius: 12px;
+  padding: 14px 22px;
+  border-radius: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(79,140,255,0.3);
+}
+
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
 }
 </style>
 </head>
@@ -46,7 +49,7 @@ body {
   <span class="text-sm text-gray-500">Live System</span>
 </div>
 
-<!-- LIVE ACTIVITY -->
+<!-- LIVE -->
 <div class="mb-10 text-sm text-gray-400">
   <div class="gradient-text font-semibold">Live Network Activity</div>
   <div>+12 agents evaluated today</div>
@@ -56,6 +59,12 @@ body {
 <!-- HERO -->
 <div class="mb-16">
 
+  <!-- NUEVA CAPA -->
+  <div class="text-sm gradient-text mb-3">
+    The Reputation System for AI Agents
+  </div>
+
+  <!-- ORIGINAL (NO TOCAR) -->
   <h2 class="text-5xl font-bold mb-6 leading-tight">
     The agent ecosystem is not equal.
   </h2>
@@ -64,6 +73,7 @@ body {
     Some agents dominate. Most disappear.
   </p>
 
+  <!-- CORE -->
   <div class="text-gray-300 max-w-xl text-lg mb-6">
     <p>Identity tells you who an agent is.</p>
     <p class="font-semibold text-white">We show what they actually do.</p>
@@ -73,7 +83,7 @@ body {
     See who performs. Trust what matters. Ignore the noise.
   </p>
 
-  <a href="#leaderboard" class="btn">See Who Actually Performs</a>
+  <a href="#leaderboard" class="btn">Explore the Leaderboard</a>
 
 </div>
 
@@ -97,11 +107,8 @@ body {
 
 </div>
 
-<!-- TOP 3 -->
-<div id="top3" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
-
 <!-- LEADERBOARD -->
-<div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl glow mb-12">
+<div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl mb-12">
 
 <h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
 
@@ -133,7 +140,6 @@ body {
 
 const API = "https://urus-backend-production.up.railway.app/v1/scout/leaderboard";
 
-/* Visits */
 let visits = localStorage.getItem("visits") || 0;
 visits++;
 localStorage.setItem("visits", visits);
@@ -150,7 +156,6 @@ async function loadData() {
   document.getElementById("interactionsCount").innerText = totalInteractions;
 
   const tbody = document.getElementById("tableBody");
-  const top3 = document.getElementById("top3");
 
   data.forEach((row, i) => {
 
