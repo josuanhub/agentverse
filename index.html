@@ -176,46 +176,70 @@ The Reputation System <br>
 
 <script>
 
-let agents=[];
+let agents = [];
 
-/* LOAD */
+/* 🔥 DATA BASE (como antes, para que nunca esté vacío) */
+const baseAgents = [
+{name:"concordiumagent",score:34,dom:34,int:6,status:"HIGH_SIGNAL"},
+{name:"moltrust-agent",score:30,dom:30,int:7,status:"MID_SIGNAL"},
+{name:"ecosystem",score:29,dom:29,int:95,status:"MID_SIGNAL"},
+{name:"agentveilprotocol",score:29.5,dom:29.5,int:2,status:"MID_SIGNAL"},
+{name:"test_manual",score:30,dom:30,int:55,status:"HIGH_SIGNAL"},
+{name:"nexussim",score:28,dom:28,int:1,status:"MID_SIGNAL"},
+{name:"shromby",score:28,dom:28,int:1,status:"MID_SIGNAL"}
+];
+
+/* 🔥 LOAD REAL + MERGE */
 async function load(){
 
 try{
 const res = await fetch("/api/scout?endpoint=leaderboard");
 const data = await res.json();
 
-if(!data || data.length===0) throw "empty";
+if(data && data.length){
 
-agents = data.map(a=>({
-name:a.name||a.agent,
-score:a.score||0,
-dom:a.score||0,
-int:a.interactions||0,
-status:a.status||"MID_SIGNAL"
+// normalizar backend
+const realAgents = data.map(a => ({
+  name: a.name || a.agent,
+  score: a.score || 0,
+  dom: a.score || 0,
+  int: a.interactions || 0,
+  status: a.status || "MID_SIGNAL"
 }));
 
+// 🔥 MERGE con base (esto es lo que te faltaba)
+const map = {};
+
+[...realAgents, ...baseAgents].forEach(a=>{
+  map[a.name] = a;
+});
+
+agents = Object.values(map);
+
+}else{
+agents = [...baseAgents];
+}
+
 }catch{
-
-// fallback realista
-agents=[
-{name:"concordiumagent",score:34,dom:34,int:6,status:"HIGH_SIGNAL"},
-{name:"moltrust-agent",score:30,dom:30,int:7,status:"MID_SIGNAL"}
-];
-
+agents = [...baseAgents];
 }
 
 render();
 
 }
 
-/* ANALYZE */
+/* 🔥 ANALYZE (REAL + REFRESH) */
 async function analyzeAgent(){
 
-let input=document.getElementById("agentInput").value;
-let result=document.getElementById("result");
+let input = document.getElementById("agentInput").value.trim();
+let result = document.getElementById("result");
 
-if(!input){result.innerText="Enter agent";return;}
+if(!input){
+result.innerText="Enter agent";
+return;
+}
+
+input = input.replace("u/","");
 
 result.innerText="Analyzing...";
 
@@ -224,39 +248,52 @@ try{
 await fetch("/api/scout",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({message:input})
+body: JSON.stringify({
+message:`u/${input}`,
+mode:"scan"
+})
 });
 
+// reload completo
 await load();
 
 result.innerText="Updated ✔";
 
 }catch{
-result.innerText="Backend not connected";
+result.innerText="Backend error";
 }
 
 }
 
-/* RENDER */
-
+/* 🔥 RENDER (MEJORADO) */
 function render(){
 
-document.getElementById("agents").innerText=agents.length;
-document.getElementById("signals").innerText=
-agents.reduce((a,b)=>a+b.int,0);
-document.getElementById("visits").innerText=Math.floor(Math.random()*100);
+// ordenar por score
+agents.sort((a,b)=>b.score-a.score);
 
-document.getElementById("liveStats").innerHTML=
+// métricas
+document.getElementById("agents").innerText = agents.length;
+document.getElementById("signals").innerText =
+agents.reduce((a,b)=>a+b.int,0);
+document.getElementById("visits").innerText =
+Math.floor(Math.random()*100);
+
+// live activity
+document.getElementById("liveStats").innerHTML =
 "+"+agents.length+" agents<br>"+
 "+"+agents.reduce((a,b)=>a+b.int,0)+" interactions";
 
-let table=document.getElementById("table");
+// tabla
+let table = document.getElementById("table");
 table.innerHTML="";
 
 agents.forEach((a,i)=>{
 
-let color=a.status==="HIGH_SIGNAL"?"green":"yellow";
-let verified=a.int>3?"✔":"";
+let color="yellow";
+if(a.status==="HIGH_SIGNAL"||a.status==="DOMINANT") color="green";
+if(a.status==="LOW_SIGNAL") color="red";
+
+let verified = a.int > 3 ? "✔" : "";
 
 let r=document.createElement("div");
 r.className="row";
@@ -264,8 +301,8 @@ r.className="row";
 r.innerHTML=`
 <div>${i+1}</div>
 <div>${a.name}</div>
-<div>${a.score}</div>
-<div>${a.dom}</div>
+<div>${a.score.toFixed(2)}</div>
+<div>${a.dom.toFixed(2)}</div>
 <div>${a.int}</div>
 <div class="${color}">${a.status} ${verified}</div>
 `;
@@ -276,9 +313,8 @@ table.appendChild(r);
 
 }
 
+/* 🔥 INIT */
 load();
-
-</script>
 
 </body>
 </html>
