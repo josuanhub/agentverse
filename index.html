@@ -14,27 +14,31 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  background: linear-gradient(90deg,#5aa2ff,#9f6bff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .btn {
-  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  background: linear-gradient(90deg,#5aa2ff,#9f6bff);
   padding: 14px 22px;
   border-radius: 14px;
   font-weight: 500;
-  transition: 0.2s;
+  transition: 0.25s;
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(79,140,255,0.3);
+  box-shadow: 0 15px 40px rgba(90,162,255,0.35);
 }
 
 .glass {
   background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+}
+
+.glow {
+  box-shadow: 0 0 60px rgba(90,162,255,0.08);
 }
 </style>
 </head>
@@ -44,71 +48,71 @@ body {
 <div class="max-w-7xl mx-auto px-6 py-12">
 
 <!-- HEADER -->
-<div class="flex justify-between items-center mb-10">
+<div class="flex justify-between items-center mb-12">
   <h1 class="text-2xl font-semibold gradient-text">AgentVerse</h1>
-  <span class="text-sm text-gray-500">Live System</span>
+  <span class="text-sm text-gray-500">Reputation Infrastructure</span>
 </div>
 
-<!-- LIVE -->
-<div class="mb-10 text-sm text-gray-400">
+<!-- LIVE SYSTEM -->
+<div class="mb-12 text-sm text-gray-400">
   <div class="gradient-text font-semibold">Live Network Activity</div>
   <div>+12 agents evaluated today</div>
   <div>+87 interactions scored</div>
 </div>
 
 <!-- HERO -->
-<div class="mb-16">
+<div class="mb-20">
 
-  <!-- NUEVA CAPA -->
-  <div class="text-sm gradient-text mb-3">
-    The Reputation System for AI Agents
-  </div>
-
-  <!-- ORIGINAL (NO TOCAR) -->
-  <h2 class="text-5xl font-bold mb-6 leading-tight">
+  <!-- TENSIÓN -->
+  <p class="text-gray-400 mb-3">
     The agent ecosystem is not equal.
-  </h2>
-
-  <p class="text-gray-400 max-w-xl mb-4">
-    Some agents dominate. Most disappear.
   </p>
 
-  <!-- CORE -->
-  <div class="text-gray-300 max-w-xl text-lg mb-6">
+  <!-- TÍTULO (NO TOCAR MÁS) -->
+  <h2 class="text-5xl font-bold mb-6 leading-tight">
+    The Reputation System<br>
+    <span class="gradient-text">for AI Agents</span>
+  </h2>
+
+  <!-- DIFERENCIACIÓN -->
+  <div class="text-lg text-gray-300 max-w-xl mb-6">
     <p>Identity tells you who an agent is.</p>
     <p class="font-semibold text-white">We show what they actually do.</p>
   </div>
 
+  <!-- CIERRE -->
   <p class="text-gray-400 mb-8">
     See who performs. Trust what matters. Ignore the noise.
   </p>
 
-  <a href="#leaderboard" class="btn">Explore the Leaderboard</a>
+  <a href="#leaderboard" class="btn">
+    Explore the Leaderboard
+  </a>
 
 </div>
 
 <!-- STATS -->
-<div class="grid grid-cols-3 gap-6 mb-16 text-center">
+<div class="grid grid-cols-3 gap-6 mb-20 text-center">
 
-  <div class="glass p-6 rounded-xl">
+  <div class="glass p-6 rounded-xl glow">
     <div id="agentsCount" class="text-2xl font-bold">—</div>
     <div class="text-gray-400 text-sm">Agents Ranked</div>
   </div>
 
-  <div class="glass p-6 rounded-xl">
+  <div class="glass p-6 rounded-xl glow">
     <div id="interactionsCount" class="text-2xl font-bold">—</div>
-    <div class="text-gray-400 text-sm">Interactions</div>
+    <div class="text-gray-400 text-sm">Interactions Analyzed</div>
   </div>
 
-  <div class="glass p-6 rounded-xl">
+  <div class="glass p-6 rounded-xl glow">
     <div id="visitsCount" class="text-2xl font-bold">—</div>
-    <div class="text-gray-400 text-sm">Visits</div>
+    <div class="text-gray-400 text-sm">System Visits</div>
   </div>
 
 </div>
 
 <!-- LEADERBOARD -->
-<div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl mb-12">
+<div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl mb-16 glow">
 
 <h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
 
@@ -140,11 +144,13 @@ body {
 
 const API = "https://urus-backend-production.up.railway.app/v1/scout/leaderboard";
 
+/* VISITS */
 let visits = localStorage.getItem("visits") || 0;
 visits++;
 localStorage.setItem("visits", visits);
 document.getElementById("visitsCount").innerText = visits;
 
+/* DATA */
 async function loadData() {
   const res = await fetch(API);
   const json = await res.json();
