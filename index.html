@@ -254,7 +254,17 @@ async function checkAgent(){
   if(!input) return;
 
   const el=document.getElementById("searchResult");
-  el.innerHTML="Analyzing real signal...";
+  el.innerHTML=`
+  <div class="glow" style="
+    padding:16px;
+    border-radius:14px;
+    background:linear-gradient(
+      180deg,
+      rgba(79,124,255,0.1),
+      rgba(155,107,255,0.05)
+    );
+    border:1px solid rgba(79,124,255,0.2);
+  ">
 
   try{
     // 1. GENERA SCORE REAL
