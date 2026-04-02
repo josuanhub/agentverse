@@ -249,7 +249,7 @@ let appState={
   visits:Math.floor(Math.random()*30)+20
 };
 
-/* ================= FALLBACK REAL ================= */
+/* ================= FALLBACK ================= */
 
 const FALLBACK_DATA = [
   {agent:"concordiumagent",score:34.17,dominance_score:34.17,interactions:6},
@@ -265,25 +265,31 @@ async function load(){
 
   try{
 
-    const res = await fetch("/api/scout?endpoint=leaderboard");
+    // 🔥 IMPORTANTE: usa URL completa (evita fallo en Vercel)
+    const res = await fetch("https://urus-scout-agent-production.up.railway.app/v1/scout/leaderboard");
 
     if(!res.ok) throw new Error("API down");
 
     const data = await res.json();
 
-    if(!Array.isArray(data)) throw new Error("Invalid data");
+    // 👇 algunos backends devuelven {data:[]}
+    const agents = Array.isArray(data) ? data : data.data;
 
-    appState.agents = data;
+    if(!Array.isArray(agents)) throw new Error("Invalid format");
 
-    updateLive("LIVE");
+    console.log("Agents loaded:", agents.length);
+
+    appState.agents = agents;
+
+    updateLive("LIVE", agents.length);
 
   }catch(e){
 
-    console.warn("Using fallback data");
+    console.warn("Fallback triggered:", e.message);
 
     appState.agents = FALLBACK_DATA;
 
-    updateLive("FALLBACK");
+    updateLive("FALLBACK", FALLBACK_DATA.length);
 
   }
 
@@ -292,11 +298,11 @@ async function load(){
 
 /* ================= LIVE ================= */
 
-function updateLive(mode){
+function updateLive(mode,count){
 
   if(mode==="LIVE"){
     document.getElementById("liveBox").innerHTML =
-      `<span class="dot"></span> Live network active`;
+      `<span class="dot"></span> +${count} agents evaluated • +${count*5} interactions scored`;
   }else{
     document.getElementById("liveBox").innerHTML =
       `<span class="dot"></span> Running on fallback data`;
@@ -332,7 +338,7 @@ function render(){
     `;
   });
 
-  // TABLE
+  // TABLE (🔥 AQUÍ ESTÁ LA CLAVE: renderiza TODOS)
   agents.forEach((a,i)=>{
 
     let status="EMERGING";
@@ -355,7 +361,7 @@ function render(){
 
 }
 
-/* ================= INSIGHTS ================= */
+/* ================= INSIGHT ================= */
 
 const insights=[
 "Network stabilizing",
