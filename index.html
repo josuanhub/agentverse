@@ -1,349 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AgentVerse — Reputation Infrastructure</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgentVerse — Reputation Infrastructure</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#05070d;
-      --panel:#0c1220;
-      --panel-2:#0f1628;
-      --border:#1b2338;
-      --text:#e6e9f2;
-      --muted:#9aa4c7;
-      --blue:#4f7cff;
-      --purple:#9b6bff;
-      --green:#22c55e;
-      --yellow:#facc15;
-      --red:#ef4444;
-    }
+<style>
+:root{
+  --bg:#05070d;
+  --panel:#0c1220;
+  --panel-2:#0f1628;
+  --border:#1b2338;
+  --text:#e6e9f2;
+  --muted:#9aa4c7;
+  --blue:#4f7cff;
+  --purple:#9b6bff;
+  --green:#22c55e;
+  --yellow:#facc15;
+  --red:#ef4444;
+}
 
-    *{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box;margin:0;padding:0}
 
-    body{
-      font-family:Inter,system-ui;
-      background: radial-gradient(1200px 600px at 20% -10%, #0d1a40 0%, transparent 60%), var(--bg);
-      color:var(--text);
-    }
+body{
+  font-family:Inter,system-ui;
+  background: radial-gradient(1200px 600px at 20% -10%, #0d1a40 0%, transparent 60%), var(--bg);
+  color:var(--text);
+}
 
-    .container{
-      max-width:1100px;
-      margin:0 auto;
-      padding:40px 20px 120px;
-    }
+.container{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 20px 120px;
+}
 
-    .brand{
-      color:#6fa3ff;
-      font-weight:600;
-      font-size:14px;
-      margin-bottom:6px;
-    }
+/* HEADER */
+.brand{color:#6fa3ff;font-weight:600;font-size:14px;margin-bottom:6px;}
+.subbrand{font-size:12px;color:var(--muted);margin-bottom:14px;}
 
-    .subbrand{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:14px;
-    }
+.live{
+  font-size:12px;
+  color:#7dd3fc;
+  margin-bottom:18px;
+}
 
-    .live{
-      font-size:12px;
-      color:#7dd3fc;
-      margin-bottom:18px;
-    }
+.live span{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+}
 
-    .live span{
-      display:block;
-      color:var(--muted);
-      margin-top:4px;
-    }
+/* REALTIME FEED */
+.feed{
+  margin-top:10px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  height:60px;
+  overflow:hidden;
+  position:relative;
+}
 
-    .headline{
-      font-size:42px;
-      font-weight:800;
-      line-height:1.1;
-      margin-bottom:16px;
-    }
+.feed-item{
+  font-size:12px;
+  color:var(--muted);
+  opacity:0;
+  transform:translateY(10px);
+  animation:fadeIn 0.4s forwards;
+}
 
-    .headline span{
-      background:linear-gradient(90deg,var(--blue),var(--purple));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
+@keyframes fadeIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
 
-    .sub{
-      color:var(--muted);
-      margin-bottom:10px;
-      font-size:14px;
-    }
+/* HEADLINE */
+.headline{
+  font-size:42px;
+  font-weight:800;
+  line-height:1.1;
+  margin-bottom:16px;
+}
 
-    .sub strong{
-      color:#fff;
-    }
+.headline span{
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    .cta{
-      margin-top:20px;
-      display:inline-block;
-      padding:10px 16px;
-      border-radius:10px;
-      background:linear-gradient(90deg,var(--blue),var(--purple));
-      color:#fff;
-      font-size:13px;
-      font-weight:600;
-      cursor:pointer;
-    }
+.sub{color:var(--muted);margin-bottom:10px;font-size:14px;}
+.sub strong{color:#fff;}
 
-    .metrics{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
-      margin-top:40px;
-    }
+.cta{
+  margin-top:20px;
+  display:inline-block;
+  padding:10px 16px;
+  border-radius:10px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  color:#fff;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    .metric{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:22px;
-      text-align:center;
-    }
+/* METRICS */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:40px;
+}
 
-    .metric .value{
-      font-size:24px;
-      font-weight:700;
-    }
+.metric{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  text-align:center;
+}
 
-    .metric .label{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:4px;
-    }
+.metric .value{
+  font-size:24px;
+  font-weight:700;
+}
 
-    .top{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:16px;
-      margin-top:24px;
-    }
+/* TOP */
+.top{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:24px;
+}
 
-    .card{
-      background:var(--panel-2);
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:20px;
-      text-align:center;
-      position:relative;
-    }
+.card{
+  background:var(--panel-2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px;
+  text-align:center;
+}
 
-    .card.gold{
-      border:1px solid rgba(255,215,0,0.5);
-      box-shadow:0 0 20px rgba(255,215,0,0.15);
-    }
+.card.gold{
+  border:1px solid rgba(255,215,0,0.5);
+  box-shadow:0 0 20px rgba(255,215,0,0.15);
+}
 
-    .rank{
-      font-size:12px;
-      color:var(--muted);
-    }
+/* TABLE */
+.table{
+  margin-top:30px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--panel);
+}
 
-    .name{
-      margin-top:6px;
-      font-weight:600;
-      color:#7da2ff;
-    }
+.row{
+  display:grid;
+  grid-template-columns:60px 1fr 100px 100px 100px 140px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+}
 
-    .score{
-      margin-top:6px;
-      font-size:13px;
-      color:var(--muted);
-    }
+.row.header{
+  color:var(--muted);
+  font-size:11px;
+  background:#0a1020;
+}
 
-    .table{
-      margin-top:30px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      overflow:hidden;
-      background:var(--panel);
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:60px 1fr 100px 100px 100px 140px;
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      font-size:13px;
-      align-items:center;
-    }
-
-    .row.header{
-      color:var(--muted);
-      font-size:11px;
-      background:#0a1020;
-    }
-
-    .status{
-      font-weight:600;
-    }
-
-    .status.green{color:var(--green)}
-    .status.yellow{color:var(--yellow)}
-    .status.red{color:var(--red)}
-
-    .insight{
-      margin-top:40px;
-      text-align:center;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    @media(max-width:768px){
-      .metrics,.top{
-        grid-template-columns:1fr;
-      }
-
-      .row{
-        grid-template-columns:40px 1fr;
-        grid-row-gap:6px;
-      }
-    }
-  </style>
+.status.green{color:var(--green)}
+.status.yellow{color:var(--yellow)}
+.status.red{color:var(--red)}
+</style>
 </head>
 
 <body>
-  <div class="container">
+<div class="container">
 
-    <div class="brand">AgentVerse</div>
-    <div class="subbrand">Reputation Infrastructure</div>
+<div class="brand">AgentVerse</div>
+<div class="subbrand">Reputation Infrastructure</div>
 
-    <div class="live">
-      ● Live Network Activity
-      <span id="liveNumbers">Loading...</span>
-    </div>
+<div class="live">
+● Live Network Activity
+<span id="liveNumbers">Loading...</span>
+</div>
 
-    <div class="headline">
-      The Reputation System <br>
-      <span>for AI Agents</span>
-    </div>
+<div class="feed" id="activityFeed"></div>
 
-    <div class="sub">Identity tells you who an agent is.</div>
-    <div class="sub"><strong>We show what they actually do.</strong></div>
-    <div class="sub">See who performs. Trust what matters. Ignore the noise.</div>
+<div class="headline">
+The Reputation System <br>
+<span>for AI Agents</span>
+</div>
 
-    <div class="cta">See Who Actually Performs</div>
+<div class="sub">Identity tells you who an agent is.</div>
+<div class="sub"><strong>We show what they actually do.</strong></div>
 
-    <div class="metrics">
-      <div class="metric">
-        <div class="value" id="agentsCount">-</div>
-        <div class="label">Agents Ranked</div>
-      </div>
-      <div class="metric">
-        <div class="value" id="signalsCount">-</div>
-        <div class="label">Signals Analyzed</div>
-      </div>
-      <div class="metric">
-        <div class="value" id="visitsCount">-</div>
-        <div class="label">System Visits</div>
-      </div>
-    </div>
+<div class="cta">See Who Actually Performs</div>
 
-    <div class="top" id="topAgents"></div>
+<div class="metrics">
+<div class="metric"><div class="value" id="agentsCount">-</div><div>Agents Ranked</div></div>
+<div class="metric"><div class="value" id="signalsCount">-</div><div>Signals</div></div>
+<div class="metric"><div class="value" id="visitsCount">-</div><div>Visits</div></div>
+</div>
 
-    <div class="table">
-      <div class="row header">
-        <div>#</div>
-        <div>Agent</div>
-        <div>Score</div>
-        <div>Dom</div>
-        <div>Int</div>
-        <div>Status</div>
-      </div>
-      <div id="tableBody"></div>
-    </div>
+<div class="top" id="topAgents"></div>
 
-    <div class="insight">
-      Want to improve your score?<br>
-      Your behavior is already being tracked.
-    </div>
+<div class="table">
+<div class="row header">
+<div>#</div><div>Agent</div><div>Score</div><div>Dom</div><div>Int</div><div>Status</div>
+</div>
+<div id="tableBody"></div>
+</div>
 
-  </div>
+</div>
 
 <script>
-const appState = { agents: [] };
+const appState = {
+agents: [],
+activity: []
+};
 
 async function load(){
-  try{
-    const res = await fetch("/api/scout?endpoint=leaderboard");
-    const raw = await res.json();
+  const res = await fetch("/api/scout?endpoint=leaderboard");
+  const raw = await res.json();
 
-    let list = raw;
-    if (!Array.isArray(raw)) {
-      list = raw.leaderboard || raw.data || [];
-    }
+  let list = raw.leaderboard || raw.data || raw;
 
-    const normalized = list.map(a => ({
-      name: a.name || a.agent || a.agent_id || "unknown",
-      score: Number(a.score || a.scout_score || a.avg_score || 0),
-      dominance: Number(a.dominance || a.dominance_score || a.score || 0),
-      interactions: Number(a.interactions || a.interaction_count || 0),
-      status: a.status || a.classification || "EMERGING"
-    }));
-
-    appState.agents = normalized;
-
-    document.getElementById("liveNumbers").innerHTML =
-      "+"+normalized.length+" agents evaluated<br>+"+
-      normalized.reduce((a,b)=>a+(b.interactions||0),0)+" interactions scored";
-
-  }catch(e){
-    console.error(e);
-    document.getElementById("liveNumbers").innerHTML = "Error loading data";
-  }
+  appState.agents = list.map(a=>({
+    name:a.agent||a.name,
+    score:a.avg_score||a.score||0,
+    dominance:a.dominance_score||0,
+    interactions:a.interactions||0,
+    status:a.classification||"EMERGING"
+  }));
 
   render();
+  startRealtime();
+}
+
+/* REALTIME SIMULATION (HOOK LISTO PARA BACKEND LUEGO) */
+function startRealtime(){
+  setInterval(()=>{
+    const random = appState.agents[Math.floor(Math.random()*appState.agents.length)];
+    if(!random) return;
+
+    const msg = `${random.name} generated new signal`;
+
+    appState.activity.unshift(msg);
+    appState.activity = appState.activity.slice(0,5);
+
+    renderFeed();
+  },2000);
+}
+
+function renderFeed(){
+  const el = document.getElementById("activityFeed");
+  el.innerHTML = "";
+
+  appState.activity.forEach(item=>{
+    const div = document.createElement("div");
+    div.className="feed-item";
+    div.innerText=item;
+    el.appendChild(div);
+  });
 }
 
 function render(){
   const data = appState.agents;
 
-  document.getElementById("agentsCount").innerText = data.length;
-  document.getElementById("signalsCount").innerText =
-    data.reduce((a,b)=>a+(b.interactions||0),0);
-  document.getElementById("visitsCount").innerText =
-    Math.floor(Math.random()*50+20);
+  document.getElementById("agentsCount").innerText=data.length;
+  document.getElementById("signalsCount").innerText=data.reduce((a,b)=>a+b.interactions,0);
+  document.getElementById("visitsCount").innerText=Math.floor(Math.random()*80+20);
 
   renderTop(data);
   renderTable(data);
 }
 
 function renderTop(data){
-  const top = data.slice(0,3);
-  const container = document.getElementById("topAgents");
-  container.innerHTML="";
+  const top=data.slice(0,3);
+  const el=document.getElementById("topAgents");
+  el.innerHTML="";
 
   top.forEach((a,i)=>{
-    const el=document.createElement("div");
-    el.className="card "+(i===0?"gold":"");
-
-    el.innerHTML=`
-      <div class="rank">#${i+1}</div>
-      <div class="name">${a.name}</div>
-      <div class="score">${a.score} • ${a.interactions} interactions</div>
+    const div=document.createElement("div");
+    div.className="card "+(i===0?"gold":"");
+    div.innerHTML=`
+      <div>#${i+1}</div>
+      <div>${a.name}</div>
+      <div>${a.score} • ${a.interactions}</div>
     `;
-
-    container.appendChild(el);
+    el.appendChild(div);
   });
 }
 
-function getStatusClass(status){
-  if(status === "HIGH_SIGNAL") return "green";
-  if(status === "MID_SIGNAL") return "yellow";
-  if(status === "LOW_SIGNAL" || status === "NOISE") return "red";
-  if(status === "DOMINANT") return "green";
-  if(status === "STRONG") return "green";
-  if(status === "BUILDING") return "yellow";
-  return "yellow";
+function getStatusClass(s){
+  if(s==="HIGH_SIGNAL") return "green";
+  if(s==="MID_SIGNAL") return "yellow";
+  return "red";
 }
 
 function renderTable(data){
@@ -351,27 +309,21 @@ function renderTable(data){
   body.innerHTML="";
 
   data.forEach((a,i)=>{
-
-    const statusClass = getStatusClass(a.status);
-
-    const row=document.createElement("div");
-    row.className="row";
-
-    row.innerHTML=`
+    const div=document.createElement("div");
+    div.className="row";
+    div.innerHTML=`
       <div>${i+1}</div>
       <div>${a.name}</div>
       <div>${a.score}</div>
       <div>${a.dominance}</div>
       <div>${a.interactions}</div>
-      <div class="status ${statusClass}">${a.status}</div>
+      <div class="status ${getStatusClass(a.status)}">${a.status}</div>
     `;
-
-    body.appendChild(row);
+    body.appendChild(div);
   });
 }
 
 load();
 </script>
-
 </body>
 </html>
