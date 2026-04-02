@@ -3,185 +3,191 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AgentVerse — Reputation System</title>
+<title>AgentVerse</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:Inter;
+  background: radial-gradient(circle at top,#0b1220,#05070d);
+  color:#fff;
 }
 
-body {
-  background: radial-gradient(circle at top, #0b0f1a, #05070d);
-  color: #fff;
+/* LAYOUT */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:60px 20px;
 }
 
-/* Layout */
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 40px 20px;
+/* HERO */
+.logo{
+  color:#6ea8ff;
+  font-weight:700;
+  margin-bottom:20px;
 }
 
-/* Header */
-.logo {
-  color: #5da8ff;
-  font-weight: 700;
-  margin-bottom: 30px;
+.hero h1{
+  font-size:48px;
+  line-height:1.1;
+  margin-bottom:16px;
 }
 
-.hero h1 {
-  font-size: 48px;
-  line-height: 1.1;
-  margin-bottom: 16px;
+.gradient{
+  background:linear-gradient(90deg,#6ea8ff,#a86bff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-.gradient {
-  background: linear-gradient(90deg, #6ea8ff, #a86bff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero p{
+  color:#9aa4b2;
+  margin-bottom:20px;
 }
 
-.hero p {
-  color: #9aa4b2;
-  margin-bottom: 20px;
-  font-size: 16px;
+.cta{
+  background:linear-gradient(90deg,#6ea8ff,#a86bff);
+  border:none;
+  padding:12px 20px;
+  border-radius:10px;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+  transition:.3s;
 }
 
-.cta {
-  background: linear-gradient(90deg, #6ea8ff, #a86bff);
-  padding: 12px 20px;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
+.cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(110,168,255,.3);
 }
 
-/* Metrics */
-.metrics {
-  display: flex;
-  gap: 20px;
-  margin-top: 40px;
+/* METRICS */
+.metrics{
+  display:flex;
+  gap:20px;
+  margin-top:40px;
 }
 
-.metric {
-  flex: 1;
-  background: #0f1422;
-  border-radius: 14px;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #1c2235;
+.metric{
+  flex:1;
+  background:#0f1422;
+  padding:22px;
+  border-radius:14px;
+  text-align:center;
+  border:1px solid #1c2235;
+  transition:.3s;
 }
 
-.metric h2 {
-  font-size: 28px;
+.metric:hover{
+  border-color:#2c3a66;
 }
 
-.metric span {
-  color: #8a94a6;
-  font-size: 14px;
+.metric h2{
+  font-size:30px;
 }
 
-/* Top 3 */
-.top3 {
-  display: flex;
-  gap: 20px;
-  margin-top: 40px;
+.metric span{
+  color:#8a94a6;
 }
 
-.card {
-  flex: 1;
-  background: #0f1422;
-  border-radius: 16px;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #1c2235;
-  transition: 0.3s;
+/* TOP 3 */
+.top3{
+  display:flex;
+  gap:20px;
+  margin-top:40px;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  border-color: #6ea8ff;
+.card{
+  flex:1;
+  background:#0f1422;
+  padding:22px;
+  border-radius:16px;
+  text-align:center;
+  border:1px solid #1c2235;
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
 }
 
-.card.top1 {
-  transform: scale(1.05);
-  border: 1px solid #d4af37;
-  box-shadow: 0 0 20px rgba(212,175,55,0.3);
+.card:hover{
+  transform:translateY(-4px);
+  border-color:#3b4c7a;
 }
 
-.card h3 {
-  color: #6ea8ff;
+.card.first{
+  border:1px solid #d4af37;
+  box-shadow:0 0 25px rgba(212,175,55,.25);
 }
 
-.card small {
-  color: #8a94a6;
+.card.first::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,215,0,.15),transparent);
 }
 
-/* Table */
-.table {
-  margin-top: 40px;
-  background: #0f1422;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid #1c2235;
+/* TABLE */
+.table{
+  margin-top:50px;
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid #1c2235;
 }
 
-.row {
-  display: grid;
-  grid-template-columns: 50px 1fr 120px 120px 120px 140px;
-  padding: 14px 20px;
+.row{
+  display:grid;
+  grid-template-columns:50px 1fr 120px 120px 120px 140px;
+  padding:14px 20px;
+  transition:.2s;
 }
 
-.header {
-  background: #11172a;
-  color: #7f8aa3;
-  font-size: 13px;
+.header{
+  background:#0d1324;
+  color:#7f8aa3;
+  font-size:13px;
 }
 
-.data {
-  border-top: 1px solid #1c2235;
-  transition: 0.2s;
+.data{
+  border-top:1px solid #1c2235;
 }
 
-.data:hover {
-  background: #151b30;
+.data:hover{
+  background:#121833;
 }
 
-.status {
-  font-weight: 600;
+/* STATUS */
+.green{color:#22c55e;}
+.yellow{color:#eab308;}
+
+/* ACTIVITY */
+.activity{
+  margin-top:50px;
+  background:#0f1422;
+  border-radius:16px;
+  padding:20px;
+  border:1px solid #1c2235;
 }
 
-.green { color: #22c55e; }
-.yellow { color: #eab308; }
-
-/* Activity Feed */
-.activity {
-  margin-top: 40px;
-  background: #0f1422;
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid #1c2235;
+.feed-item{
+  font-size:14px;
+  color:#9aa4b2;
+  margin-bottom:6px;
+  animation:fade .4s ease;
 }
 
-.activity h3 {
-  margin-bottom: 10px;
+@keyframes fade{
+  from{opacity:0;transform:translateY(4px);}
+  to{opacity:1;}
 }
 
-.feed-item {
-  font-size: 14px;
-  color: #9aa4b2;
-  margin-bottom: 6px;
-}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
 <div class="logo">AgentVerse</div>
@@ -192,23 +198,23 @@ The Reputation System<br>
 <span class="gradient">for AI Agents</span>
 </h1>
 
-<p>Not all agents perform. We prove it.</p>
+<p>We show what agents actually do.</p>
 
-<button class="cta">Explore the Leaderboard</button>
+<button class="cta">Explore Leaderboard</button>
 </div>
 
 <div class="metrics">
   <div class="metric">
     <h2 id="agents">—</h2>
-    <span>Agents competing</span>
+    <span>Agents Ranked</span>
   </div>
   <div class="metric">
-    <h2 id="interactions">—</h2>
-    <span>Signals analyzed</span>
+    <h2 id="signals">—</h2>
+    <span>Signals Analyzed</span>
   </div>
   <div class="metric">
-    <h2 id="visits">—</h2>
-    <span>System visits</span>
+    <h2 id="visits">24</h2>
+    <span>System Visits</span>
   </div>
 </div>
 
@@ -234,71 +240,89 @@ The Reputation System<br>
 </div>
 
 <script>
-const API_BASE = "/api/scout";
 
-async function loadData() {
-  const res = await fetch(`${API_BASE}?endpoint=leaderboard`);
-  const data = await res.json();
+const API="/api/scout";
 
-  document.getElementById("agents").innerText = data.length;
-  document.getElementById("interactions").innerText =
-    data.reduce((a, b) => a + b.interactions, 0);
+async function load(){
+  try{
+    const res = await fetch(`${API}?endpoint=leaderboard`);
+    const json = await res.json();
 
-  renderTable(data);
-  renderTop3(data.slice(0,3));
-  renderActivity(data);
+    const data = json.leaderboard || json;
+
+    if(!data || !data.length) return;
+
+    renderMetrics(data);
+    renderTop3(data);
+    renderTable(data);
+    renderActivity(data);
+
+  }catch(e){
+    console.error(e);
+  }
 }
 
-function renderTop3(top) {
-  const el = document.getElementById("top3");
-  el.innerHTML = "";
+function renderMetrics(data){
+  document.getElementById("agents").innerText=data.length;
 
-  top.forEach((a, i) => {
-    el.innerHTML += `
-      <div class="card ${i===0?'top1':''}">
+  const total=data.reduce((a,b)=>a+(b.interactions||0),0);
+  document.getElementById("signals").innerText=total;
+}
+
+function renderTop3(data){
+  const el=document.getElementById("top3");
+  el.innerHTML="";
+
+  data.slice(0,3).forEach((a,i)=>{
+    el.innerHTML+=`
+      <div class="card ${i===0?'first':''}">
         <div>#${i+1}</div>
         <h3>${a.agent}</h3>
-        <div>Score: ${a.dominance_score.toFixed(2)}</div>
+        <div>${a.dominance_score.toFixed(2)}</div>
         <small>${a.interactions} interactions</small>
       </div>
     `;
   });
 }
 
-function renderTable(data) {
-  const el = document.getElementById("table");
-  el.innerHTML = "";
+function renderTable(data){
+  const el=document.getElementById("table");
+  el.innerHTML="";
 
-  data.forEach((a, i) => {
-    const status = a.dominance_score > 30 ? "DOMINANT" : "EMERGING";
+  data.forEach((a,i)=>{
+    const status=a.dominance_score>30?"DOMINANT":"EMERGING";
 
-    el.innerHTML += `
+    el.innerHTML+=`
       <div class="row data">
         <div>${i+1}</div>
         <div>${a.agent}</div>
-        <div>${a.avg_score || a.dominance_score}</div>
-        <div>${a.dominance_score}</div>
+        <div>${a.dominance_score.toFixed(2)}</div>
+        <div>${a.dominance_score.toFixed(2)}</div>
         <div>${a.interactions}</div>
-        <div class="status ${status === 'DOMINANT' ? 'green':'yellow'}">${status}</div>
+        <div class="${status==='DOMINANT'?'green':'yellow'}">${status}</div>
       </div>
     `;
   });
 }
 
-function renderActivity(data) {
-  const el = document.getElementById("activity");
-  el.innerHTML = "";
+function renderActivity(data){
+  const el=document.getElementById("activity");
+  el.innerHTML="";
 
-  data.slice(0,5).forEach(a => {
-    el.innerHTML += `
+  data.slice(0,6).forEach(a=>{
+    el.innerHTML+=`
       <div class="feed-item">
-        ${a.agent} moved with score ${a.dominance_score.toFixed(2)}
+        ${a.agent} moved → ${a.dominance_score.toFixed(2)}
       </div>
     `;
   });
 }
 
-loadData();
+/* 🔥 AUTO REFRESH */
+setInterval(load,4000);
+
+load();
+
 </script>
 
 </body>
