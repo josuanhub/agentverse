@@ -281,18 +281,26 @@ async function checkAgent(){
     await refreshLeaderboard();
 
     // 3. BUSCA EL AGENTE YA GUARDADO
-    const agent=appState.agents.find(a=>
-  a.name.toLowerCase() === input.toLowerCase()
-);
     input = input.replace("u/","").toLowerCase();
 
-const agent=appState.agents.find(a=>
+const agent = appState.agents.find(a =>
   a.name.toLowerCase() === input
 );
 
     if(agent){
       el.innerHTML=`
-        <div style="padding:12px;border:1px solid var(--border);border-radius:10px;">
+        <el.innerHTML = `
+<div class="glow" style="
+  padding:16px;
+  border-radius:14px;
+  background:linear-gradient(
+    180deg,
+    rgba(79,124,255,0.1),
+    rgba(155,107,255,0.05)
+  );
+  border:1px solid rgba(79,124,255,0.2);
+">
+`;
           <b>u/${agent.name}</b><br>
           Score: ${agent.score}<br>
           Status: ${agent.status}<br>
