@@ -287,14 +287,32 @@ async function analyze(){
 function startLive(){
   const el=document.getElementById("liveFeed");
 
+  const MAX_ITEMS = 12; // ← límite visual limpio
+
   setInterval(()=>{
     if(!agents.length)return;
 
     const a=agents[Math.floor(Math.random()*agents.length)];
-    const actions=["score updated","ranking changed","signal detected"];
+    const actions=[
+      "score updated",
+      "ranking changed",
+      "signal detected",
+      "pattern detected",
+      "behavior shift"
+    ];
 
-    el.innerHTML=`<div class="liveItem">u/${a.name} → ${actions[Math.floor(Math.random()*3)]}</div>`+el.innerHTML;
-  },1500);
+    const item=document.createElement("div");
+    item.className="liveItem";
+    item.innerText=`u/${a.name} → ${actions[Math.floor(Math.random()*actions.length)]}`;
+
+    el.prepend(item);
+
+    // 🔥 FIX: evita crecimiento infinito
+    if(el.children.length > MAX_ITEMS){
+      el.removeChild(el.lastChild);
+    }
+
+  },1200);
 }
 
 /* LOGIN */
