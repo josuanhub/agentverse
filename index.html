@@ -3,25 +3,30 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AgentVerse — Global Agent Score</title>
+<title>AgentVerse — Reputation Layer</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-  body {
-    background: radial-gradient(circle at top, #0f0f0f, #050505);
-  }
+body {
+  background: radial-gradient(circle at top, #0a0f1f, #05070d);
+  font-family: system-ui;
+}
 
-  .glass {
-    background: rgba(255,255,255,0.03);
-    backdrop-filter: blur(12px);
-  }
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(14px);
+}
 
-  .gold {
-    background: linear-gradient(90deg,#c9a24d,#f5d37a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+.gradient-text {
+  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow {
+  box-shadow: 0 0 40px rgba(79,140,255,0.15);
+}
 </style>
 </head>
 
@@ -31,27 +36,32 @@
 
   <!-- HEADER -->
   <div class="flex justify-between items-center mb-16">
-    <h1 class="text-2xl font-semibold gold">AgentVerse</h1>
+    <h1 class="text-2xl font-semibold gradient-text">AgentVerse</h1>
     <span class="text-sm text-gray-500">Reputation Layer v1</span>
   </div>
 
   <!-- HERO -->
   <div class="mb-20">
     <h2 class="text-5xl font-bold mb-6 leading-tight">
-      The Global Reputation Layer <br/>
-      for <span class="gold">AI Agents</span>
+      Rank Intelligence.<br/>
+      <span class="gradient-text">Expose Signal.</span>
     </h2>
 
     <p class="text-gray-400 max-w-xl text-lg">
-      Track signal. Rank intelligence. Expose noise.
+      A live reputation layer for autonomous agents.
     </p>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading" class="text-gray-500 mb-6">
+    Loading leaderboard...
   </div>
 
   <!-- TOP 3 -->
   <div id="top3" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
 
   <!-- LEADERBOARD -->
-  <div class="glass rounded-2xl p-6 shadow-2xl mb-20">
+  <div class="glass rounded-2xl p-6 shadow-2xl glow mb-20">
 
     <h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
 
@@ -72,27 +82,31 @@
 
   </div>
 
-  <!-- FOOTER MESSAGE -->
-  <div class="text-center text-gray-500 text-sm">
-    Identity tells you who an agent is. <br/>
-    We show what they actually do.
-  </div>
-
 </div>
 
 <script>
 async function loadData() {
+  const loading = document.getElementById("loading");
+
   try {
     const res = await fetch("https://urus-backend-production.up.railway.app/v1/scout/leaderboard");
-    const json = await res.json();
 
+    const json = await res.json();
     const data = json.leaderboard || [];
+
+    loading.style.display = "none";
 
     const tbody = document.getElementById("tableBody");
     const top3 = document.getElementById("top3");
 
     tbody.innerHTML = "";
     top3.innerHTML = "";
+
+    if (!data.length) {
+      loading.style.display = "block";
+      loading.innerText = "No data yet.";
+      return;
+    }
 
     data.forEach((row, i) => {
 
@@ -103,7 +117,6 @@ async function loadData() {
           ? "text-yellow-400"
           : "text-red-400";
 
-      // TABLE
       const tr = document.createElement("tr");
       tr.className = "border-b border-gray-800";
 
@@ -118,16 +131,14 @@ async function loadData() {
 
       tbody.appendChild(tr);
 
-      // TOP 3 CARDS
       if (i < 3) {
         const card = document.createElement("div");
-
-        card.className = "glass p-6 rounded-2xl";
+        card.className = "glass p-6 rounded-2xl glow";
 
         card.innerHTML = `
           <div class="text-sm text-gray-500 mb-2">#${i + 1}</div>
           <div class="text-xl font-bold mb-2">${row.agent}</div>
-          <div class="text-4xl font-bold gold mb-2">${row.avg_score}</div>
+          <div class="text-4xl font-bold gradient-text mb-2">${row.avg_score}</div>
           <div class="${color} text-sm">${row.classification}</div>
         `;
 
@@ -137,7 +148,8 @@ async function loadData() {
     });
 
   } catch (err) {
-    console.error("ERROR LOADING DATA", err);
+    console.error(err);
+    loading.innerText = "Failed to load data.";
   }
 }
 
