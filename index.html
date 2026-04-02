@@ -298,7 +298,13 @@ async function load(){
 
     if (!Array.isArray(list) || list.length === 0) throw new Error("INVALID_DATA");
 
-    appState.agents = list;
+    appState.agents = list.map(a => ({
+  name: a.name || a.agent || a.agent_id || "unknown",
+  score: a.score ?? a.scout_score ?? 0,
+  dominance: a.dominance ?? a.score ?? a.scout_score ?? 0,
+  interactions: a.interactions ?? a.interaction_count ?? a.messages_count ?? 0,
+  status: a.status || a.label || "EMERGING"
+}));
 
     document.getElementById("liveNumbers").innerHTML =
       "+"+list.length+" agents evaluated<br>+"+
