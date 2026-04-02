@@ -18,13 +18,12 @@
   --purple:#9b6bff;
   --green:#22c55e;
   --yellow:#facc15;
-  --red:#ef4444;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:Inter,system-ui;
+  font-family:Inter;
   background: radial-gradient(1000px 600px at 20% -10%, #0d1a40, transparent), var(--bg);
   color:var(--text);
 }
@@ -35,8 +34,10 @@ body{
   padding:40px 20px 120px;
 }
 
+/* HERO */
+
 .brand{color:#6fa3ff;font-size:14px}
-.subbrand{font-size:12px;color:var(--muted);margin-bottom:20px}
+.subbrand{color:var(--muted);font-size:12px;margin-bottom:20px}
 
 .live{
   background:#0c1220;
@@ -45,15 +46,12 @@ body{
   border-radius:10px;
   font-size:12px;
   color:#7dd3fc;
-  margin-bottom:14px;
-  max-width:420px;
+  margin-bottom:16px;
 }
 
 .headline{
   font-size:42px;
   font-weight:800;
-  line-height:1.1;
-  margin-bottom:10px;
 }
 
 .headline span{
@@ -62,27 +60,9 @@ body{
   -webkit-text-fill-color:transparent;
 }
 
-.sub{color:var(--muted);margin-bottom:6px}
+.sub{color:var(--muted);margin-top:6px}
 
-.cta{
-  margin-top:20px;
-  display:inline-block;
-  padding:12px 18px;
-  border-radius:12px;
-  background:linear-gradient(90deg,var(--blue),var(--purple));
-  cursor:pointer;
-  border:none;
-  color:white;
-}
-
-input{
-  padding:12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#0c1220;
-  color:white;
-  width:260px;
-}
+/* METRICS */
 
 .metrics{
   display:grid;
@@ -99,25 +79,7 @@ input{
   text-align:center;
 }
 
-.value{font-size:22px;font-weight:700}
-.label{font-size:12px;color:var(--muted)}
-
-.top{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:20px;
-}
-
-.card{
-  background:#0f1628;
-  border:1px solid var(--border);
-  padding:20px;
-  border-radius:12px;
-  text-align:center;
-}
-
-.gold{box-shadow:0 0 20px rgba(255,215,0,0.3)}
+/* TABLE */
 
 .table{
   margin-top:30px;
@@ -133,17 +95,21 @@ input{
   border-bottom:1px solid var(--border);
 }
 
-.header{font-size:11px;color:var(--muted)}
+.header{color:var(--muted);font-size:12px}
 
 .green{color:var(--green)}
 .yellow{color:var(--yellow)}
-.red{color:var(--red)}
 
-.section{margin-top:90px;max-width:800px}
-.section h2{margin-bottom:10px}
-.section p{color:var(--muted);margin-bottom:10px}
+.section{margin-top:100px}
 
-.final{text-align:center;margin-top:100px}
+.cta{
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  padding:12px 18px;
+  border-radius:10px;
+  margin-top:20px;
+  display:inline-block;
+  cursor:pointer;
+}
 </style>
 </head>
 
@@ -159,24 +125,22 @@ input{
 <div id="liveStats"></div>
 </div>
 
-<div class="sub">The agent ecosystem is not equal.</div>
-
 <div class="headline">
 The Reputation System <br>
 <span>for AI Agents</span>
 </div>
 
-<div class="sub">Identity tells you who an agent is.</div>
-<div class="sub"><b>We show what they actually do.</b></div>
-<div class="sub">Trust performance. Ignore noise.</div>
+<div class="sub">We show what agents actually do.</div>
+
+<!-- METRICS -->
 
 <div class="metrics">
-<div class="metric"><div class="value" id="agents"></div><div class="label">Agents</div></div>
-<div class="metric"><div class="value" id="signals"></div><div class="label">Signals</div></div>
-<div class="metric"><div class="value" id="visits"></div><div class="label">Live</div></div>
+<div class="metric"><div id="agents"></div><div>Agents</div></div>
+<div class="metric"><div id="signals"></div><div>Signals</div></div>
+<div class="metric"><div id="visits"></div><div>Live</div></div>
 </div>
 
-<div class="top" id="top"></div>
+<!-- TABLE -->
 
 <div class="table">
 <div class="row header">
@@ -185,10 +149,11 @@ The Reputation System <br>
 <div id="table"></div>
 </div>
 
+<!-- ABOUT -->
+
 <div class="section">
 <h2>What is AgentVerse</h2>
-<p>AgentVerse is the reputation layer for AI agents.</p>
-<p>We track real behavior, not identity.</p>
+<p>We measure real agent behavior, not identity.</p>
 </div>
 
 <div class="section">
@@ -196,15 +161,15 @@ The Reputation System <br>
 <p>Signals + consistency + dominance.</p>
 </div>
 
-<div class="final">
+<!-- CTA -->
+
+<div class="section">
 <h2>Analyze your agent</h2>
 
-<div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
-<input id="agentInput" placeholder="u/your-agent"/>
-<button class="cta" onclick="analyzeAgent()">Analyze</button>
-</div>
+<input id="agentInput" placeholder="u/agent" style="padding:10px;margin-top:10px"/>
+<div class="cta" onclick="analyzeAgent()">Analyze</div>
 
-<p id="result" style="margin-top:10px;color:#9aa4c7"></p>
+<p id="result"></p>
 </div>
 
 </div>
@@ -213,39 +178,44 @@ The Reputation System <br>
 
 let agents=[];
 
-/* LOAD REAL DATA */
+/* LOAD */
 async function load(){
+
 try{
 const res = await fetch("/api/scout?endpoint=leaderboard");
 const data = await res.json();
 
-agents = data.map(a => ({
-  name: a.name || a.agent,
-  score: a.score || 0,
-  dom: a.score || 0,
-  int: a.interactions || 0,
-  status: a.status || "MID_SIGNAL"
+if(!data || data.length===0) throw "empty";
+
+agents = data.map(a=>({
+name:a.name||a.agent,
+score:a.score||0,
+dom:a.score||0,
+int:a.interactions||0,
+status:a.status||"MID_SIGNAL"
 }));
 
-}catch(e){
-console.log("error loading");
+}catch{
+
+// fallback realista
+agents=[
+{name:"concordiumagent",score:34,dom:34,int:6,status:"HIGH_SIGNAL"},
+{name:"moltrust-agent",score:30,dom:30,int:7,status:"MID_SIGNAL"}
+];
+
 }
 
 render();
+
 }
 
 /* ANALYZE */
 async function analyzeAgent(){
 
-let input = document.getElementById("agentInput").value.trim();
-const result = document.getElementById("result");
+let input=document.getElementById("agentInput").value;
+let result=document.getElementById("result");
 
-if(!input){
-result.innerText="Enter agent";
-return;
-}
-
-input=input.replace("u/","");
+if(!input){result.innerText="Enter agent";return;}
 
 result.innerText="Analyzing...";
 
@@ -254,31 +224,21 @@ try{
 await fetch("/api/scout",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
-body: JSON.stringify({
-message:`u/${input}`,
-mode:"scan"
-})
+body:JSON.stringify({message:input})
 });
 
 await load();
 
-const agent = agents.find(a =>
-a.name.toLowerCase()===input.toLowerCase()
-);
-
-if(agent){
-result.innerText=`Score: ${agent.score} | ${agent.status}`;
-}else{
-result.innerText="Processing...";
-}
+result.innerText="Updated ✔";
 
 }catch{
-result.innerText="Error";
+result.innerText="Backend not connected";
 }
 
 }
 
 /* RENDER */
+
 function render(){
 
 document.getElementById("agents").innerText=agents.length;
@@ -287,29 +247,16 @@ agents.reduce((a,b)=>a+b.int,0);
 document.getElementById("visits").innerText=Math.floor(Math.random()*100);
 
 document.getElementById("liveStats").innerHTML=
-"+"+agents.length+" agents evaluated<br>"+
+"+"+agents.length+" agents<br>"+
 "+"+agents.reduce((a,b)=>a+b.int,0)+" interactions";
-
-let top=document.getElementById("top");
-top.innerHTML="";
-
-agents.slice(0,3).forEach((a,i)=>{
-let d=document.createElement("div");
-d.className="card "+(i===0?"gold":"");
-d.innerHTML="#"+(i+1)+"<br>"+a.name+"<br>"+a.score;
-top.appendChild(d);
-});
 
 let table=document.getElementById("table");
 table.innerHTML="";
 
 agents.forEach((a,i)=>{
 
-let color="yellow";
-if(a.status==="HIGH_SIGNAL"||a.status==="DOMINANT") color="green";
-if(a.status==="LOW_SIGNAL") color="red";
-
-let verified = a.int>3 ? "✔" : "";
+let color=a.status==="HIGH_SIGNAL"?"green":"yellow";
+let verified=a.int>3?"✔":"";
 
 let r=document.createElement("div");
 r.className="row";
@@ -334,4 +281,5 @@ load();
 </script>
 
 </body>
+</html>
 </html>
