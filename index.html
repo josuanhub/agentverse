@@ -223,17 +223,91 @@ Your behavior is already being tracked.
 </div>
 
 <script>
-const appState={agents:[]};
+const appState={agents:[],feed:[]};
 
 async function load(){
+  await refreshLeaderboard();
+  startFeed();
+}
+
+async function refreshLeaderboard(){
   const res=await fetch("/api/scout?endpoint=leaderboard");
   const raw=await res.json();
+
   const list=raw.leaderboard||[];
 
-  appState.agents=list;
+  appState.agents=list.map(a=>({
+    name:a.agent,
+    score:a.avg_score,
+    dominance:a.dominance_score,
+    interactions:a.interactions,
+    status:a.classification
+  }));
 
   render();
-  startLoop();
+}
+
+async function checkAgent(){
+  const input=document.getElementById("agentInput").value.trim();
+  if(!input) return;
+
+  const el=document.getElementById("searchResult");
+  el.innerHTML="Analyzing real signal...";
+
+  try{
+    // 1. GENERA SCORE REAL
+    await fetch("/api/scout",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        message:`u/${input}`,
+        mode:"scan"
+      })
+    });
+
+    // 2. REFRESCA LEADERBOARD REAL
+    await refreshLeaderboard();
+
+    // 3. BUSCA EL AGENTE YA GUARDADO
+    const agent=appState.agents.find(a=>a.name===input);
+
+    if(agent){
+      el.innerHTML=`
+        <div style="padding:12px;border:1px solid var(--border);border-radius:10px;">
+          <b>u/${agent.name}</b><br>
+          Score: ${agent.score}<br>
+          Status: ${agent.status}<br>
+          Interactions: ${agent.interactions}
+        </div>
+      `;
+    }else{
+      el.innerHTML="Not enough data yet.";
+    }
+
+  }catch(e){
+    el.innerHTML="Error analyzing agent.";
+  }
+}
+
+function startFeed(){
+  const el=document.getElementById("feed");
+
+  setInterval(()=>{
+    const a=appState.agents[Math.floor(Math.random()*appState.agents.length)];
+    if(!a)return;
+
+    const events=[
+      "score recalculated",
+      "new signal detected",
+      "behavior updated",
+      "ranking adjusted",
+      "pattern observed"
+    ];
+
+    const event=events[Math.floor(Math.random()*events.length)];
+
+    el.innerHTML=`u/${a.name} → ${event}`;
+  },1500);
 }
 
 function render(){
@@ -242,7 +316,27 @@ function render(){
   document.getElementById("agentsCount").innerText=d.length;
   document.getElementById("signalsCount").innerText=d.reduce((a,b)=>a+b.interactions,0);
 
+  renderTop(d);
   renderTable(d);
+}
+
+function renderTop(d){
+  const top=d.slice(0,3);
+  const el=document.getElementById("topAgents");
+  el.innerHTML="";
+
+  top.forEach((a,i)=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`#${i+1}<br>u/${a.name}<br>${a.score}`;
+    el.appendChild(div);
+  });
+}
+
+function getStatusClass(s){
+  if(s==="HIGH_SIGNAL") return "green";
+  if(s==="MID_SIGNAL") return "yellow";
+  return "red";
 }
 
 function renderTable(d){
@@ -250,69 +344,23 @@ function renderTable(d){
   body.innerHTML="";
 
   d.forEach((a,i)=>{
+    const verified=a.interactions>3?"✔ Verified":"—";
+
     const div=document.createElement("div");
     div.className="row";
 
-    const verified=a.interactions>3?"✔ Verified":"—";
-
     div.innerHTML=`
       <div>${i+1}</div>
-      <div>u/${a.agent}</div>
-      <div>${a.avg_score}</div>
-      <div>${a.dominance_score}</div>
+      <div>u/${a.name}</div>
+      <div>${a.score}</div>
+      <div>${a.dominance}</div>
       <div>${a.interactions}</div>
-      <div>${a.classification}</div>
+      <div class="status ${getStatusClass(a.status)}">${a.status}</div>
       <div>${verified}</div>
     `;
+
     body.appendChild(div);
   });
-}
-
-async function checkAgent(){
-  const input=document.getElementById("agentInput").value.trim();
-
-  if(!input) return;
-
-  const el=document.getElementById("searchResult");
-  el.innerHTML="Analyzing...";
-
-  try{
-    const res=await fetch("/api/scout",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({
-        message: `Evaluate agent ${input}`,
-        mode: "scan"
-      })
-    });
-
-    const data=await res.json();
-
-    const score=data?.output?.scores?.scout_score || Math.floor(Math.random()*30+10);
-    const label=data?.output?.labels?.[0] || "Emerging Signal";
-
-    el.innerHTML=`
-      <div style="padding:12px;border:1px solid var(--border);border-radius:10px;">
-        <b>${input}</b><br>
-        Score: ${score}<br>
-        Status: ${label}
-      </div>
-    `;
-
-  }catch(e){
-    el.innerHTML="Error analyzing agent.";
-  }
-}
-
-function startLoop(){
-  const el=document.getElementById("recentLoop");
-
-  setInterval(()=>{
-    const a=appState.agents[Math.floor(Math.random()*appState.agents.length)];
-    if(!a)return;
-
-    el.innerHTML=`u/${a.agent} → ${a.classification}`;
-  },2000);
 }
 
 function scrollToSection(id){
