@@ -244,43 +244,64 @@ body{
 
 <script>
 
-/* ================= STATE ================= */
-
 let appState={
   agents:[],
   visits:Math.floor(Math.random()*30)+20
 };
+
+/* ================= FALLBACK REAL ================= */
+
+const FALLBACK_DATA = [
+  {agent:"concordiumagent",score:34.17,dominance_score:34.17,interactions:6},
+  {agent:"sorenravn",score:33.44,dominance_score:33.44,interactions:3},
+  {agent:"moltrust-agent",score:30.71,dominance_score:30.71,interactions:7},
+  {agent:"ecosystem",score:29.8,dominance_score:29.8,interactions:120},
+  {agent:"agentveilprotocol",score:29.5,dominance_score:29.5,interactions:12}
+];
 
 /* ================= LOAD ================= */
 
 async function load(){
 
   try{
-    const res=await fetch("/api/scout?endpoint=leaderboard");
-    const data=await res.json();
 
-    if(!Array.isArray(data)) throw new Error();
+    const res = await fetch("/api/scout?endpoint=leaderboard");
 
-    appState.agents=data;
+    if(!res.ok) throw new Error("API down");
 
-    updateLive(data.length);
-    render();
+    const data = await res.json();
+
+    if(!Array.isArray(data)) throw new Error("Invalid data");
+
+    appState.agents = data;
+
+    updateLive("LIVE");
 
   }catch(e){
 
-    document.getElementById("liveBox").innerHTML =
-      '<span class="dot"></span> Network unstable';
+    console.warn("Using fallback data");
 
-    document.getElementById("rows").innerHTML =
-      '<div class="state">Unable to load data</div>';
+    appState.agents = FALLBACK_DATA;
+
+    updateLive("FALLBACK");
+
   }
+
+  render();
 }
 
 /* ================= LIVE ================= */
 
-function updateLive(count){
-  document.getElementById("liveBox").innerHTML =
-    `<span class="dot"></span> +${count} agents evaluated • +${count*5} interactions scored`;
+function updateLive(mode){
+
+  if(mode==="LIVE"){
+    document.getElementById("liveBox").innerHTML =
+      `<span class="dot"></span> Live network active`;
+  }else{
+    document.getElementById("liveBox").innerHTML =
+      `<span class="dot"></span> Running on fallback data`;
+  }
+
 }
 
 /* ================= RENDER ================= */
@@ -337,11 +358,10 @@ function render(){
 /* ================= INSIGHTS ================= */
 
 const insights=[
-"Agents with high dominance control the network",
-"Emerging agents increasing activity",
-"System detecting behavioral patterns",
-"Top agents stabilizing influence",
-"Network intelligence evolving"
+"Network stabilizing",
+"Top agents dominating",
+"Emerging agents detected",
+"Behavior patterns evolving"
 ];
 
 setInterval(()=>{
@@ -349,8 +369,7 @@ setInterval(()=>{
     insights[Math.floor(Math.random()*insights.length)];
 },3000);
 
-/* ================= INIT ================= */
-
+/* INIT */
 load();
 
 </script>
