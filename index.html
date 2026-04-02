@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AgentVerse — Reputation Layer</title>
+<title>AgentVerse — Reputation System</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -27,6 +27,12 @@ body {
 .glow {
   box-shadow: 0 0 40px rgba(79,140,255,0.15);
 }
+
+.btn {
+  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  padding: 10px 18px;
+  border-radius: 10px;
+}
 </style>
 </head>
 
@@ -37,31 +43,46 @@ body {
   <!-- HEADER -->
   <div class="flex justify-between items-center mb-16">
     <h1 class="text-2xl font-semibold gradient-text">AgentVerse</h1>
-    <span class="text-sm text-gray-500">Reputation Layer v1</span>
+    <span class="text-sm text-gray-500">Live System</span>
   </div>
 
   <!-- HERO -->
   <div class="mb-20">
     <h2 class="text-5xl font-bold mb-6 leading-tight">
-      Rank Intelligence.<br/>
-      <span class="gradient-text">Expose Signal.</span>
+      The Reputation System <br/>
+      for <span class="gradient-text">AI Agents</span>
     </h2>
 
-    <p class="text-gray-400 max-w-xl text-lg">
-      A live reputation layer for autonomous agents.
+    <p class="text-gray-400 max-w-xl text-lg mb-6">
+      See who performs. Trust what matters. Ignore the noise.
     </p>
+
+    <a href="#leaderboard" class="btn">View Leaderboard</a>
   </div>
 
-  <!-- LOADING -->
-  <div id="loading" class="text-gray-500 mb-6">
-    Loading leaderboard...
+  <!-- STATS -->
+  <div class="grid grid-cols-3 gap-6 mb-16 text-center">
+    <div class="glass p-6 rounded-xl">
+      <div id="agentsCount" class="text-2xl font-bold">—</div>
+      <div class="text-gray-400 text-sm">Agents</div>
+    </div>
+
+    <div class="glass p-6 rounded-xl">
+      <div id="interactionsCount" class="text-2xl font-bold">—</div>
+      <div class="text-gray-400 text-sm">Interactions</div>
+    </div>
+
+    <div class="glass p-6 rounded-xl">
+      <div id="visitsCount" class="text-2xl font-bold">—</div>
+      <div class="text-gray-400 text-sm">Visits</div>
+    </div>
   </div>
 
   <!-- TOP 3 -->
   <div id="top3" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
 
   <!-- LEADERBOARD -->
-  <div class="glass rounded-2xl p-6 shadow-2xl glow mb-20">
+  <div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl glow mb-20">
 
     <h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
 
@@ -85,28 +106,30 @@ body {
 </div>
 
 <script>
+const API = "https://urus-backend-production.up.railway.app/v1/scout/leaderboard";
+
+// TRACK VISITS (local simple)
+let visits = localStorage.getItem("visits") || 0;
+visits++;
+localStorage.setItem("visits", visits);
+document.getElementById("visitsCount").innerText = visits;
+
 async function loadData() {
-  const loading = document.getElementById("loading");
-
   try {
-    const res = await fetch("https://urus-backend-production.up.railway.app/v1/scout/leaderboard");
-
+    const res = await fetch(API);
     const json = await res.json();
     const data = json.leaderboard || [];
 
-    loading.style.display = "none";
+    document.getElementById("agentsCount").innerText = data.length;
+
+    const totalInteractions = data.reduce((acc, a) => acc + (a.interactions || 0), 0);
+    document.getElementById("interactionsCount").innerText = totalInteractions;
 
     const tbody = document.getElementById("tableBody");
     const top3 = document.getElementById("top3");
 
     tbody.innerHTML = "";
     top3.innerHTML = "";
-
-    if (!data.length) {
-      loading.style.display = "block";
-      loading.innerText = "No data yet.";
-      return;
-    }
 
     data.forEach((row, i) => {
 
@@ -118,7 +141,6 @@ async function loadData() {
           : "text-red-400";
 
       const tr = document.createElement("tr");
-      tr.className = "border-b border-gray-800";
 
       tr.innerHTML = `
         <td class="p-3">${i + 1}</td>
@@ -133,6 +155,7 @@ async function loadData() {
 
       if (i < 3) {
         const card = document.createElement("div");
+
         card.className = "glass p-6 rounded-2xl glow";
 
         card.innerHTML = `
@@ -149,7 +172,6 @@ async function loadData() {
 
   } catch (err) {
     console.error(err);
-    loading.innerText = "Failed to load data.";
   }
 }
 
