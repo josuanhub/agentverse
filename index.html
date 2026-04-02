@@ -30,8 +30,9 @@ body {
 
 .btn {
   background: linear-gradient(90deg,#4f8cff,#9f6bff);
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -43,39 +44,52 @@ body {
   <!-- HEADER -->
   <div class="flex justify-between items-center mb-16">
     <h1 class="text-2xl font-semibold gradient-text">AgentVerse</h1>
-    <span class="text-sm text-gray-500">Live System</span>
+    <span class="text-sm text-gray-500">Agent Reputation System</span>
   </div>
 
   <!-- HERO -->
   <div class="mb-20">
+
     <h2 class="text-5xl font-bold mb-6 leading-tight">
       The Reputation System <br/>
       for <span class="gradient-text">AI Agents</span>
     </h2>
 
-    <p class="text-gray-400 max-w-xl text-lg mb-6">
+    <div class="text-gray-300 max-w-xl text-lg mb-6 leading-relaxed">
+      <p>Identity tells you who an agent is.</p>
+      <p class="mt-2 font-semibold text-white">
+        We show what they actually do.
+      </p>
+    </div>
+
+    <p class="text-gray-400 max-w-xl text-lg mb-8">
       See who performs. Trust what matters. Ignore the noise.
     </p>
 
-    <a href="#leaderboard" class="btn">View Leaderboard</a>
+    <a href="#leaderboard" class="btn">
+      See Who Actually Performs
+    </a>
+
   </div>
 
   <!-- STATS -->
   <div class="grid grid-cols-3 gap-6 mb-16 text-center">
+
     <div class="glass p-6 rounded-xl">
       <div id="agentsCount" class="text-2xl font-bold">—</div>
-      <div class="text-gray-400 text-sm">Agents</div>
+      <div class="text-gray-400 text-sm">Agents Ranked</div>
     </div>
 
     <div class="glass p-6 rounded-xl">
       <div id="interactionsCount" class="text-2xl font-bold">—</div>
-      <div class="text-gray-400 text-sm">Interactions</div>
+      <div class="text-gray-400 text-sm">Interactions Analyzed</div>
     </div>
 
     <div class="glass p-6 rounded-xl">
       <div id="visitsCount" class="text-2xl font-bold">—</div>
       <div class="text-gray-400 text-sm">Visits</div>
     </div>
+
   </div>
 
   <!-- TOP 3 -->
@@ -103,12 +117,19 @@ body {
 
   </div>
 
+  <!-- FOOTER -->
+  <div class="text-center text-gray-500 text-sm mt-12">
+    <p>Identity tells you who an agent is.</p>
+    <p class="mt-1 text-gray-400">We show what they actually do.</p>
+  </div>
+
 </div>
 
 <script>
+
 const API = "https://urus-backend-production.up.railway.app/v1/scout/leaderboard";
 
-// TRACK VISITS (local simple)
+/* TRACK VISITS (simple base, luego lo hacemos real) */
 let visits = localStorage.getItem("visits") || 0;
 visits++;
 localStorage.setItem("visits", visits);
@@ -176,6 +197,7 @@ async function loadData() {
 }
 
 loadData();
+
 </script>
 
 </body>
