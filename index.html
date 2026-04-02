@@ -35,7 +35,6 @@
       padding:40px 20px 120px;
     }
 
-    /* HEADER (NO TOCAR BRANDING BASE) */
     .brand{
       color:#6fa3ff;
       font-weight:600;
@@ -96,7 +95,6 @@
       cursor:pointer;
     }
 
-    /* METRICS */
     .metrics{
       display:grid;
       grid-template-columns:repeat(3,1fr);
@@ -123,7 +121,6 @@
       margin-top:4px;
     }
 
-    /* TOP AGENTS */
     .top{
       display:grid;
       grid-template-columns:repeat(3,1fr);
@@ -162,7 +159,6 @@
       color:var(--muted);
     }
 
-    /* TABLE */
     .table{
       margin-top:30px;
       border:1px solid var(--border);
@@ -194,7 +190,6 @@
     .status.yellow{color:var(--yellow)}
     .status.red{color:var(--red)}
 
-    /* FOOTER INSIGHT */
     .insight{
       margin-top:40px;
       text-align:center;
@@ -202,7 +197,6 @@
       font-size:12px;
     }
 
-    /* MOBILE */
     @media(max-width:768px){
       .metrics,.top{
         grid-template-columns:1fr;
@@ -219,7 +213,6 @@
 <body>
   <div class="container">
 
-    <!-- BRANDING (NO CAMBIAR) -->
     <div class="brand">AgentVerse</div>
     <div class="subbrand">Reputation Infrastructure</div>
 
@@ -239,7 +232,6 @@
 
     <div class="cta">See Who Actually Performs</div>
 
-    <!-- METRICS -->
     <div class="metrics">
       <div class="metric">
         <div class="value" id="agentsCount">-</div>
@@ -255,10 +247,8 @@
       </div>
     </div>
 
-    <!-- TOP -->
     <div class="top" id="topAgents"></div>
 
-    <!-- TABLE -->
     <div class="table">
       <div class="row header">
         <div>#</div>
@@ -279,9 +269,6 @@
   </div>
 
 <script>
-/* ===========================
-   STATE
-=========================== */
 const appState = {
   agents: [],
   fallback: [
@@ -293,23 +280,34 @@ const appState = {
   ]
 };
 
-/* ===========================
-   LOAD DATA (FIX FINAL)
-=========================== */
 async function load(){
   try{
     const res = await fetch("/api/scout?endpoint=leaderboard");
+
+    if(!res.ok) throw new Error("API_ERROR");
+
     const data = await res.json();
 
-    if(!Array.isArray(data)) throw new Error();
+    console.log("API RESPONSE:", data);
 
-    appState.agents = data;
+    let list = data;
+
+    if (!Array.isArray(data)) {
+      list = data.data || data.leaderboard || data.results || [];
+    }
+
+    if (!Array.isArray(list) || list.length === 0) throw new Error("INVALID_DATA");
+
+    appState.agents = list;
 
     document.getElementById("liveNumbers").innerHTML =
-      "+"+data.length+" agents evaluated<br>+"+
-      data.reduce((a,b)=>a+(b.interactions||0),0)+" interactions scored";
+      "+"+list.length+" agents evaluated<br>+"+
+      list.reduce((a,b)=>a+(b.interactions||0),0)+" interactions scored";
 
-  }catch{
+  }catch(err){
+
+    console.warn("FALLBACK ACTIVATED:", err);
+
     appState.agents = appState.fallback;
 
     document.getElementById("liveNumbers").innerHTML =
@@ -319,9 +317,6 @@ async function load(){
   render();
 }
 
-/* ===========================
-   RENDER
-=========================== */
 function render(){
 
   const data = appState.agents;
@@ -338,9 +333,6 @@ function render(){
   renderTable(data);
 }
 
-/* ===========================
-   TOP 3
-=========================== */
 function renderTop(data){
 
   const top = data.slice(0,3);
@@ -361,9 +353,6 @@ function renderTop(data){
   });
 }
 
-/* ===========================
-   TABLE
-=========================== */
 function renderTable(data){
 
   const body=document.getElementById("tableBody");
@@ -391,7 +380,6 @@ function renderTable(data){
   });
 }
 
-/* INIT */
 load();
 </script>
 
