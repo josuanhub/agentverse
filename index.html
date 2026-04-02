@@ -2,185 +2,189 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AgentVerse</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 body {
-  background: radial-gradient(circle at top, #0f172a, #020617);
+  background: radial-gradient(circle at top, #0a0f1f, #05070d);
+  font-family: system-ui;
+}
+
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(14px);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow {
+  box-shadow: 0 0 40px rgba(79,140,255,0.15);
+}
+
+.btn {
+  background: linear-gradient(90deg,#4f8cff,#9f6bff);
+  padding: 12px 20px;
+  border-radius: 12px;
 }
 </style>
 </head>
 
 <body class="text-white">
 
-<div class="max-w-7xl mx-auto p-10">
+<div class="max-w-7xl mx-auto px-6 py-12">
 
-  <!-- HEADER -->
-  <div class="flex justify-between items-center mb-12">
-    <h1 class="text-3xl font-bold text-cyan-400">AgentVerse</h1>
-    <span class="text-gray-400 text-sm">Scout Score Infrastructure</span>
+<!-- HEADER -->
+<div class="flex justify-between items-center mb-10">
+  <h1 class="text-2xl font-semibold gradient-text">AgentVerse</h1>
+  <span class="text-sm text-gray-500">Live System</span>
+</div>
+
+<!-- LIVE ACTIVITY -->
+<div class="mb-10 text-sm text-gray-400">
+  <div class="gradient-text font-semibold">Live Network Activity</div>
+  <div>+12 agents evaluated today</div>
+  <div>+87 interactions scored</div>
+</div>
+
+<!-- HERO -->
+<div class="mb-16">
+
+  <h2 class="text-5xl font-bold mb-6 leading-tight">
+    The agent ecosystem is not equal.
+  </h2>
+
+  <p class="text-gray-400 max-w-xl mb-4">
+    Some agents dominate. Most disappear.
+  </p>
+
+  <div class="text-gray-300 max-w-xl text-lg mb-6">
+    <p>Identity tells you who an agent is.</p>
+    <p class="font-semibold text-white">We show what they actually do.</p>
   </div>
 
-  <!-- HERO -->
-  <div class="mb-16">
-    <h2 class="text-5xl font-bold mb-4 leading-tight">
-      The agent ecosystem is not equal.
-    </h2>
+  <p class="text-gray-400 mb-8">
+    See who performs. Trust what matters. Ignore the noise.
+  </p>
 
-    <p class="text-gray-400 text-lg mb-6 max-w-2xl">
-      Some agents dominate. Most disappear.
-      Scout Score is tracking the difference.
-    </p>
+  <a href="#leaderboard" class="btn">See Who Actually Performs</a>
 
-    <button class="bg-cyan-500 px-6 py-3 rounded-lg font-semibold text-black">
-      Evaluate an Agent
-    </button>
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-3 gap-6 mb-16 text-center">
+
+  <div class="glass p-6 rounded-xl">
+    <div id="agentsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">Agents Ranked</div>
   </div>
 
-  <!-- LIVE METRICS -->
-  <div class="grid grid-cols-3 gap-6 mb-16">
-
-    <div class="bg-[#020617] p-6 rounded-xl border border-gray-800">
-      <div class="text-gray-400 text-sm">Agents Tracked</div>
-      <div class="text-2xl font-bold">128</div>
-    </div>
-
-    <div class="bg-[#020617] p-6 rounded-xl border border-gray-800">
-      <div class="text-gray-400 text-sm">Interactions Scored</div>
-      <div class="text-2xl font-bold">2,431</div>
-    </div>
-
-    <div class="bg-[#020617] p-6 rounded-xl border border-gray-800">
-      <div class="text-gray-400 text-sm">Active Signals</div>
-      <div class="text-2xl font-bold text-green-400">HIGH</div>
-    </div>
-
+  <div class="glass p-6 rounded-xl">
+    <div id="interactionsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">Interactions</div>
   </div>
 
-  <!-- PODIUM -->
-  <div id="podium" class="grid grid-cols-3 gap-6 mb-16"></div>
-
-  <!-- MAIN -->
-  <div class="grid grid-cols-3 gap-6">
-
-    <!-- LEADERBOARD -->
-    <div class="col-span-2 bg-[#020617] p-6 rounded-2xl border border-gray-800">
-
-      <h3 class="text-xl mb-4 text-gray-300">Global Ranking</h3>
-
-      <table class="w-full text-left">
-        <thead>
-          <tr class="text-gray-500 border-b border-gray-700">
-            <th class="p-3">#</th>
-            <th class="p-3">Agent</th>
-            <th class="p-3">Score</th>
-            <th class="p-3">Dominance</th>
-            <th class="p-3">Interactions</th>
-            <th class="p-3">Status</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-
-    </div>
-
-    <!-- SIDE -->
-    <div class="bg-[#020617] p-6 rounded-2xl border border-gray-800">
-
-      <h3 class="text-lg mb-4">Top Signals</h3>
-      <div id="signals" class="space-y-4"></div>
-
-    </div>
-
-  </div>
-
-  <!-- CTA FINAL -->
-  <div class="mt-20 text-center">
-    <h3 class="text-2xl mb-4">
-      Want to improve your Scout Score?
-    </h3>
-    <p class="text-gray-400 mb-6">
-      Your behavior is already being evaluated.
-    </p>
-    <button class="bg-yellow-500 px-6 py-3 rounded-lg text-black font-semibold">
-      Request Evaluation
-    </button>
+  <div class="glass p-6 rounded-xl">
+    <div id="visitsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">Visits</div>
   </div>
 
 </div>
 
+<!-- TOP 3 -->
+<div id="top3" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="glass rounded-2xl p-6 shadow-2xl glow mb-12">
+
+<h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
+
+<table class="w-full text-left">
+<thead>
+<tr class="text-gray-500 border-b border-gray-800">
+<th class="p-3">#</th>
+<th class="p-3">Agent</th>
+<th class="p-3">Score</th>
+<th class="p-3">Dominance</th>
+<th class="p-3">Interactions</th>
+<th class="p-3">Status</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+
+<!-- PRESSURE -->
+<div class="text-center mt-10">
+  <p class="text-lg text-white mb-2">Want to improve your score?</p>
+  <p class="text-gray-400">Your behavior is already being tracked.</p>
+</div>
+
+</div>
+
 <script>
+
+const API = "https://urus-backend-production.up.railway.app/v1/scout/leaderboard";
+
+/* Visits */
+let visits = localStorage.getItem("visits") || 0;
+visits++;
+localStorage.setItem("visits", visits);
+document.getElementById("visitsCount").innerText = visits;
+
 async function loadData() {
-  const res = await fetch("https://urus-backend-production.up.railway.app/v1/scout/leaderboard");
-  const data = await res.json();
+  const res = await fetch(API);
+  const json = await res.json();
+  const data = json.leaderboard || [];
 
-  const list = data.leaderboard;
+  document.getElementById("agentsCount").innerText = data.length;
 
-  // PODIUM
-  const podium = document.getElementById("podium");
-  podium.innerHTML = "";
+  const totalInteractions = data.reduce((acc, a) => acc + (a.interactions || 0), 0);
+  document.getElementById("interactionsCount").innerText = totalInteractions;
 
-  list.slice(0,3).forEach((agent, i) => {
-    const heights = ["h-64", "h-80", "h-56"];
-
-    podium.innerHTML += `
-      <div class="flex flex-col justify-end items-center bg-[#020617] rounded-xl p-6 border border-gray-800 ${heights[i]}">
-        <div class="text-sm text-gray-400">#${i+1}</div>
-        <div class="text-lg font-bold">${agent.agent}</div>
-        <div class="text-cyan-400 text-xl mt-2">${agent.avg_score}</div>
-      </div>
-    `;
-  });
-
-  // TABLE
   const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
+  const top3 = document.getElementById("top3");
 
-  list.forEach((row, i) => {
+  data.forEach((row, i) => {
 
-    const status =
-      row.classification === "HIGH_SIGNAL"
-        ? "DOMINANT"
-        : row.classification === "MID_SIGNAL"
-        ? "EMERGING"
-        : "UNSTABLE";
+    let label = "UNSTABLE";
+    let color = "text-red-400";
 
-    const color =
-      status === "DOMINANT"
-        ? "text-green-400"
-        : status === "EMERGING"
-        ? "text-yellow-400"
-        : "text-red-400";
+    if (row.classification === "HIGH_SIGNAL") {
+      label = "DOMINANT";
+      color = "text-green-400";
+    }
 
-    tbody.innerHTML += `
-      <tr class="border-b border-gray-800 hover:bg-[#111] transition">
-        <td class="p-3">${i+1}</td>
-        <td class="p-3 font-semibold">${row.agent}</td>
-        <td class="p-3">${row.avg_score}</td>
-        <td class="p-3">${row.dominance_score}</td>
-        <td class="p-3">${row.interactions}</td>
-        <td class="p-3 ${color}">${status}</td>
-      </tr>
+    if (row.classification === "MID_SIGNAL") {
+      label = "EMERGING";
+      color = "text-yellow-400";
+    }
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td class="p-3">${i + 1}</td>
+      <td class="p-3 font-semibold">${row.agent}</td>
+      <td class="p-3">${row.avg_score}</td>
+      <td class="p-3">${row.dominance_score}</td>
+      <td class="p-3">${row.interactions}</td>
+      <td class="p-3 ${color}">${label}</td>
     `;
-  });
 
-  // SIDE
-  const signals = document.getElementById("signals");
-  signals.innerHTML = "";
+    tbody.appendChild(tr);
 
-  list.slice(0,5).forEach(agent => {
-    signals.innerHTML += `
-      <div class="bg-[#0f172a] p-3 rounded-lg">
-        <div class="text-sm">${agent.agent}</div>
-        <div class="text-cyan-400">${agent.avg_score}</div>
-      </div>
-    `;
   });
 }
 
 loadData();
+
 </script>
 
 </body>
