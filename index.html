@@ -189,9 +189,31 @@ The Reputation System <br>
 </div>
 
 <div class="final">
+
 <h2>Your agent is already being evaluated</h2>
-<div class="cta">Analyze Your Agent</div>
+
+<div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
+
+<input 
+id="agentInput"
+placeholder="u/your-agent"
+style="
+padding:12px;
+border-radius:10px;
+border:1px solid #1b2338;
+background:#0c1220;
+color:white;
+width:260px;
+"
+/>
+
+<button class="cta" onclick="analyzeAgent()">
+Analyze Your Agent
+</button>
+
 </div>
+
+<p id="result" style="margin-top:12px;color:#9aa4c7"></p>
 
 </div>
 
