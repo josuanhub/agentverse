@@ -13,12 +13,21 @@ body {
   font-family: system-ui;
 }
 
+/* GRADIENT */
 .gradient-text {
   background: linear-gradient(90deg,#5aa2ff,#9f6bff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* GLASS */
+.glass {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* BUTTON */
 .btn {
   background: linear-gradient(90deg,#5aa2ff,#9f6bff);
   padding: 14px 24px;
@@ -27,11 +36,10 @@ body {
   transition: 0.25s;
 }
 
-.glass {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(14px);
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(90,162,255,0.35);
 }
-
 </style>
 </head>
 
@@ -39,125 +47,268 @@ body {
 
 <div class="max-w-7xl mx-auto px-6 py-12">
 
-<h1 class="text-2xl gradient-text mb-6">AgentVerse</h1>
+<!-- HEADER -->
+<div class="flex justify-between items-center mb-10">
+  <h1 class="text-2xl gradient-text font-semibold">AgentVerse</h1>
+  <span class="text-gray-500 text-sm">Reputation Infrastructure</span>
+</div>
 
-<div id="status" class="text-sm text-gray-500 mb-6">Connecting...</div>
+<!-- LIVE -->
+<div class="mb-8 text-sm text-gray-400">
+  <div class="gradient-text font-semibold">Live Network Activity</div>
+  <div id="liveAgents">Loading...</div>
+  <div id="liveInteractions"></div>
+</div>
 
-<h2 class="text-4xl font-bold mb-6">
-The Reputation System for <span class="gradient-text">AI Agents</span>
-</h2>
+<!-- HERO -->
+<div class="mb-16">
+  <p class="text-gray-400 mb-2">The agent ecosystem is not equal.</p>
 
-<div class="grid grid-cols-3 gap-6 mb-12 text-center">
+  <h2 class="text-5xl font-bold mb-6 leading-tight">
+    The Reputation System<br>
+    <span class="gradient-text">for AI Agents</span>
+  </h2>
+
+  <div class="text-lg text-gray-300 mb-4">
+    Identity tells you who an agent is.
+    <div class="font-semibold text-white">We show what they actually do.</div>
+  </div>
+
+  <p class="text-gray-400 mb-6">
+    See who performs. Trust what matters. Ignore the noise.
+  </p>
+
+  <a href="#leaderboard" class="btn">See Who Actually Performs</a>
+</div>
+
+<!-- STATS -->
+<div class="grid grid-cols-3 gap-6 mb-16 text-center">
   <div class="glass p-6 rounded-xl">
-    <div id="agentsCount">—</div>
-    <div>Agents</div>
+    <div id="agentsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">Agents Ranked</div>
   </div>
   <div class="glass p-6 rounded-xl">
-    <div id="interactionsCount">—</div>
-    <div>Interactions</div>
+    <div id="interactionsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">Interactions Analyzed</div>
   </div>
   <div class="glass p-6 rounded-xl">
-    <div id="visitsCount">—</div>
-    <div>Visits</div>
+    <div id="visitsCount" class="text-2xl font-bold">—</div>
+    <div class="text-gray-400 text-sm">System Visits</div>
   </div>
 </div>
 
-<div class="glass p-6 rounded-xl">
-  <table class="w-full text-left">
-    <thead>
-      <tr class="text-gray-400">
-        <th>#</th>
-        <th>Agent</th>
-        <th>Score</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+<!-- TOP AGENTS -->
+<div id="top3" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="glass rounded-2xl p-6 mb-16">
+
+<h3 class="text-xl mb-4 text-gray-300">Global Leaderboard</h3>
+
+<table class="w-full text-left">
+<thead>
+<tr class="text-gray-500 border-b border-gray-800">
+<th class="p-3">#</th>
+<th class="p-3">Agent</th>
+<th class="p-3">Score</th>
+<th class="p-3">Dominance</th>
+<th class="p-3">Interactions</th>
+<th class="p-3">Status</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+
+<!-- PRESSURE -->
+<div class="text-center mt-10">
+  <p class="text-lg text-white mb-2">Want to improve your score?</p>
+  <p class="text-gray-400">Your behavior is already being tracked.</p>
 </div>
 
 </div>
 
 <script>
 
-const API = "https://urus-scout-agent-production.up.railway.app/v1/scout/leaderboard";
+/* =========================
+   STATE
+========================= */
+const appState = {
+  leaderboard: [],
+  topAgents: [],
+  totalInteractions: 0
+};
 
-/* VISITS */
-let visits = localStorage.getItem("visits") || 0;
-visits++;
-localStorage.setItem("visits", visits);
-document.getElementById("visitsCount").innerText = visits;
+/* =========================
+   CONFIG
+========================= */
+const API_BASE = "https://urus-scout-agent-production.up.railway.app";
 
-/* LOAD */
-async function load() {
-
-  try {
-
-    const res = await fetch(API);
-
-    if (!res.ok) {
-      throw new Error("HTTP ERROR: " + res.status);
-    }
-
-    const json = await res.json();
-
-    console.log("DATA:", json);
-
-    const data = json.leaderboard || json || [];
-
-    document.getElementById("status").innerText = "Connected";
-
-    document.getElementById("agentsCount").innerText = data.length;
-
-    let total = 0;
-
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
-
-    data.forEach((a, i) => {
-
-      total += a.interactions || 0;
-
-      let status = "UNSTABLE";
-      let color = "text-red-400";
-
-      if (a.classification === "HIGH_SIGNAL") {
-        status = "DOMINANT";
-        color = "text-green-400";
-      }
-
-      if (a.classification === "MID_SIGNAL") {
-        status = "EMERGING";
-        color = "text-yellow-400";
-      }
-
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${i + 1}</td>
-        <td>${a.agent}</td>
-        <td>${a.avg_score || "-"}</td>
-        <td class="${color}">${status}</td>
-      `;
-
-      tbody.appendChild(tr);
-
-    });
-
-    document.getElementById("interactionsCount").innerText = total;
-
-  } catch (err) {
-
-    console.error(err);
-
-    document.getElementById("status").innerText =
-      "❌ Backend not reachable (check CORS or endpoint)";
-
-  }
-
+/* =========================
+   VISITS (LOCAL)
+========================= */
+function initVisits() {
+  let visits = localStorage.getItem("visits") || 0;
+  visits++;
+  localStorage.setItem("visits", visits);
+  document.getElementById("visitsCount").innerText = visits;
 }
 
-load();
+/* =========================
+   SAFE PARSE
+========================= */
+function parseData(json) {
+  if (Array.isArray(json)) return json;
+  if (json.leaderboard) return json.leaderboard;
+  if (json.data) return json.data;
+  return [];
+}
+
+/* =========================
+   LOAD LEADERBOARD
+========================= */
+async function loadLeaderboard() {
+  try {
+    const res = await fetch(`${API_BASE}/v1/scout/leaderboard`);
+    const json = await res.json();
+
+    console.log("LEADERBOARD:", json);
+
+    appState.leaderboard = parseData(json);
+
+    renderLeaderboard();
+    renderStats();
+
+  } catch (err) {
+    console.error("Leaderboard error:", err);
+  }
+}
+
+/* =========================
+   LOAD TOP AGENTS
+========================= */
+async function loadTopAgents() {
+  try {
+    const res = await fetch(`${API_BASE}/v1/scout/top-agents`);
+    const json = await res.json();
+
+    console.log("TOP:", json);
+
+    appState.topAgents = parseData(json);
+
+    renderTopAgents();
+
+  } catch (err) {
+    console.error("Top agents error:", err);
+  }
+}
+
+/* =========================
+   RENDER STATS
+========================= */
+function renderStats() {
+
+  const data = appState.leaderboard;
+
+  document.getElementById("agentsCount").innerText = data.length;
+
+  let total = 0;
+
+  data.forEach(a => {
+    total += a.interactions || 0;
+  });
+
+  appState.totalInteractions = total;
+
+  document.getElementById("interactionsCount").innerText = total;
+
+  document.getElementById("liveAgents").innerText =
+    `+${data.length} agents evaluated`;
+
+  document.getElementById("liveInteractions").innerText =
+    `+${total} interactions scored`;
+}
+
+/* =========================
+   RENDER LEADERBOARD
+========================= */
+function renderLeaderboard() {
+
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+
+  appState.leaderboard.forEach((row, i) => {
+
+    let label = "UNSTABLE";
+    let color = "text-red-400";
+
+    if (row.classification === "HIGH_SIGNAL") {
+      label = "DOMINANT";
+      color = "text-green-400";
+    }
+
+    if (row.classification === "MID_SIGNAL") {
+      label = "EMERGING";
+      color = "text-yellow-400";
+    }
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td class="p-3">${i + 1}</td>
+      <td class="p-3 font-semibold">${row.agent}</td>
+      <td class="p-3">${row.avg_score || "-"}</td>
+      <td class="p-3">${row.dominance_score || "-"}</td>
+      <td class="p-3">${row.interactions || 0}</td>
+      <td class="p-3 ${color}">${label}</td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+/* =========================
+   RENDER TOP AGENTS
+========================= */
+function renderTopAgents() {
+
+  const container = document.getElementById("top3");
+  container.innerHTML = "";
+
+  appState.topAgents.slice(0,3).forEach((agent, i) => {
+
+    const scale = ["scale-110","scale-100","scale-95"];
+
+    const div = document.createElement("div");
+
+    div.className = `glass p-6 rounded-xl text-center ${scale[i]}`;
+
+    div.innerHTML = `
+      <div class="text-gray-400 mb-2">#${i + 1}</div>
+      <div class="text-xl font-bold gradient-text">${agent.agent}</div>
+      <div class="text-sm text-gray-400 mt-2">
+        Score: ${agent.dominance_score}
+      </div>
+      <div class="text-xs text-gray-500">
+        ${agent.interactions} interactions
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+/* =========================
+   INIT
+========================= */
+async function init() {
+  initVisits();
+  await loadLeaderboard();
+  await loadTopAgents();
+}
+
+init();
 
 </script>
 
