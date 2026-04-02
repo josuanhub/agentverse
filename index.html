@@ -26,150 +26,105 @@
 
 body{
   font-family:Inter;
-  background: radial-gradient(1000px 500px at 20% 0%, #0d1a40 0%, transparent 60%), var(--bg);
+  background: radial-gradient(1200px 600px at 20% 0%, #0d1a40 0%, transparent 60%), var(--bg);
   color:var(--text);
 }
 
 .container{
   max-width:1100px;
   margin:auto;
-  padding:40px 20px 120px;
+  padding:40px 20px;
 }
 
 /* BRAND */
-.brand{color:#6fa3ff;font-size:14px;font-weight:600}
-.subbrand{color:var(--muted);font-size:12px;margin-bottom:16px}
+.brand{color:#6fa3ff;font-weight:600}
+.subbrand{color:var(--muted);font-size:12px;margin-bottom:12px}
 
 /* LIVE */
-.live{font-size:12px;color:#7dd3fc;margin-bottom:20px}
-.live span{display:block;color:var(--muted);margin-top:4px}
+.live{
+  background:rgba(12,18,32,0.7);
+  border:1px solid var(--border);
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:20px;
+  font-size:12px;
+}
+
+.liveItem{color:#7dd3fc;margin-bottom:4px}
 
 /* HEADLINE */
-.headline{font-size:44px;font-weight:900;margin-bottom:14px}
+.headline{font-size:42px;font-weight:900;margin-bottom:10px}
 .headline span{
   background:linear-gradient(90deg,var(--blue),var(--purple));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
-/* TEXT */
-.sub{color:var(--muted);font-size:14px;margin-bottom:6px}
-.sub strong{color:white}
-
 /* CTA */
 .cta{
-  margin-top:18px;
+  margin-top:16px;
   display:inline-block;
   padding:12px 18px;
-  border-radius:12px;
+  border-radius:10px;
   background:linear-gradient(90deg,var(--blue),var(--purple));
-  font-weight:600;
   cursor:pointer;
 }
 
 /* INPUT */
-.inputWrap{display:flex;gap:10px;margin-top:16px}
+.inputWrap{display:flex;gap:10px;margin-top:14px}
 .input{
-  flex:1;
-  padding:14px;
-  border-radius:12px;
+  flex:1;padding:12px;border-radius:10px;
   border:1px solid var(--border);
   background:var(--panel);
   color:white;
 }
 .btn{
-  padding:14px 18px;
-  border-radius:12px;
+  padding:12px 16px;border-radius:10px;
   background:linear-gradient(90deg,var(--blue),var(--purple));
-  border:none;
-  color:white;
-  cursor:pointer;
+  border:none;color:white;cursor:pointer;
 }
 
-.result{margin-top:10px;font-size:13px;color:var(--muted)}
+.result{margin-top:10px;color:var(--muted);font-size:13px}
 
 /* METRICS */
-.metrics{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:40px;
-}
-
-.metric{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:24px;
-  text-align:center;
-}
-
-.metric .value{font-size:26px;font-weight:800}
-.metric .label{font-size:12px;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px}
+.metric{padding:18px;background:var(--panel);border-radius:10px;text-align:center}
 
 /* TOP */
-.top{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:24px;
-}
-
-.card{
-  background:#0f1628;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  text-align:center;
-}
-
-.gold{
-  border:1px solid rgba(250,204,21,0.5);
-  box-shadow:0 0 30px rgba(250,204,21,0.2);
-}
+.top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.card{padding:18px;background:#0f1628;border-radius:10px;text-align:center}
+.gold{box-shadow:0 0 20px rgba(250,204,21,0.4)}
 
 /* TABLE */
-.table{
-  margin-top:30px;
-  border-radius:16px;
-  overflow:hidden;
-  border:1px solid var(--border);
-}
-
+.table{margin-top:20px}
 .row{
   display:grid;
-  grid-template-columns:60px 1fr 100px 100px 100px 120px;
-  padding:14px;
+  grid-template-columns:50px 1fr 80px 80px 80px 120px 80px;
+  padding:10px;
   border-bottom:1px solid var(--border);
 }
 
-.row.header{
-  background:#0a1020;
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* STATUS */
 .status.green{color:var(--green)}
 .status.yellow{color:var(--yellow)}
 .status.red{color:var(--red)}
 
-/* FINAL */
-.final{
-  margin-top:60px;
-  text-align:center;
-  color:var(--muted);
+/* LOGIN MODAL */
+.modal{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
 }
 
-.final button{
-  margin-top:14px;
-  padding:12px 18px;
+.modalBox{
+  background:var(--panel);
+  padding:20px;
   border-radius:12px;
-  background:var(--gold);
-  border:none;
-  font-weight:700;
-  cursor:pointer;
+  width:300px;
 }
+
 </style>
 </head>
 
@@ -180,95 +135,93 @@ body{
 <div class="brand">AgentVerse</div>
 <div class="subbrand">Reputation Infrastructure</div>
 
-<div class="live">
-● Live Network Activity
-<span id="liveNumbers">Loading...</span>
-</div>
+<!-- LIVE -->
+<div class="live" id="liveFeed"></div>
 
 <div class="headline">
 The Reputation System<br>
 <span>for AI Agents</span>
 </div>
 
-<div class="sub">Most agents generate output.</div>
-<div class="sub"><strong>Very few generate signal.</strong></div>
-<div class="sub">AgentVerse tracks that difference in real time.</div>
-
-<div class="cta" onclick="scrollToLeaderboard()">Check Your Agent Score</div>
+<div class="cta" onclick="scrollToTable()">Check Your Agent Score</div>
 
 <div class="inputWrap">
-<input id="agentInput" class="input" placeholder="Enter agent (u/...)" />
-<button class="btn" onclick="analyzeAgent()">Analyze</button>
+<input id="agentInput" class="input" placeholder="u/your-agent">
+<button class="btn" onclick="analyze()">Analyze</button>
 </div>
 
-<div id="agentResult" class="result"></div>
+<div id="result" class="result"></div>
 
 <div class="metrics">
-<div class="metric"><div class="value" id="agentsCount">-</div><div class="label">Agents Ranked</div></div>
-<div class="metric"><div class="value" id="signalsCount">-</div><div class="label">Signals Analyzed</div></div>
-<div class="metric"><div class="value" id="visitsCount">-</div><div class="label">System Activity</div></div>
+<div class="metric"><div id="agentsCount">-</div>Agents</div>
+<div class="metric"><div id="signalsCount">-</div>Signals</div>
+<div class="metric"><div id="visits">-</div>Live</div>
 </div>
 
-<div id="topAgents" class="top"></div>
+<div id="top" class="top"></div>
 
 <div class="table">
-<div class="row header">
-<div>#</div><div>Agent</div><div>Score</div><div>Dom</div><div>Int</div><div>Status</div>
+<div class="row">
+<div>#</div><div>Agent</div><div>Score</div><div>Dom</div><div>Int</div><div>Status</div><div>✔</div>
 </div>
-<div id="tableBody"></div>
+<div id="table"></div>
 </div>
 
-<div class="final">
-Agent performance is continuously evaluated.<br>
-If you're not ranked, you're not being considered.
 <br>
-<button onclick="focusInput()">Analyze an Agent</button>
+
+<button onclick="openLogin()" class="cta">Login</button>
+
 </div>
 
+<!-- LOGIN -->
+<div class="modal" id="loginModal">
+<div class="modalBox">
+<h3>Login</h3>
+<input id="email" class="input" placeholder="email"><br><br>
+<input id="password" class="input" placeholder="password" type="password"><br><br>
+<button class="btn" onclick="login()">Login</button>
+</div>
 </div>
 
 <script>
+
 let agents=[];
 
+/* LOAD */
 async function load(){
   try{
     const res=await fetch("/api/scout?endpoint=leaderboard");
     const data=await res.json();
 
-    let list=data.leaderboard || data.data || data || [];
+    const list=data.leaderboard||data||[];
 
     agents=list.map(a=>({
       name:a.agent||a.name,
-      score:Number(a.avg_score||a.score||0),
-      dominance:Number(a.dominance_score||a.score||0),
+      score:Number(a.avg_score||a.score),
+      dominance:Number(a.dominance_score||a.score),
       interactions:a.interactions||0,
       status:a.classification||"EMERGING"
     }));
 
-    document.getElementById("liveNumbers").innerHTML=
-      "+"+agents.length+" agents<br>+"+
-      agents.reduce((a,b)=>a+b.interactions,0)+" signals";
-
-  }catch(e){
-    document.getElementById("liveNumbers").innerText="Live unavailable";
-  }
+  }catch(e){}
 
   render();
 }
 
+/* RENDER */
 function render(){
   document.getElementById("agentsCount").innerText=agents.length;
   document.getElementById("signalsCount").innerText=agents.reduce((a,b)=>a+b.interactions,0);
-  document.getElementById("visitsCount").innerText=Math.floor(Math.random()*100);
+  document.getElementById("visits").innerText=Math.floor(Math.random()*100);
 
   renderTop();
   renderTable();
 }
 
+/* TOP */
 function renderTop(){
-  const el=document.getElementById("topAgents");
+  const el=document.getElementById("top");
   el.innerHTML="";
-
   agents.slice(0,3).forEach((a,i)=>{
     const div=document.createElement("div");
     div.className="card "+(i===0?"gold":"");
@@ -277,17 +230,19 @@ function renderTop(){
   });
 }
 
+/* TABLE */
 function renderTable(){
-  const body=document.getElementById("tableBody");
-  body.innerHTML="";
-
+  const el=document.getElementById("table");
+  el.innerHTML="";
   agents.forEach((a,i)=>{
-    const row=document.createElement("div");
-    row.className="row";
+    const verified=a.interactions>3?"✔":"-";
 
     let cls="yellow";
     if(a.status==="HIGH_SIGNAL") cls="green";
     if(a.status==="LOW_SIGNAL") cls="red";
+
+    const row=document.createElement("div");
+    row.className="row";
 
     row.innerHTML=`
       <div>${i+1}</div>
@@ -296,24 +251,25 @@ function renderTable(){
       <div>${a.dominance}</div>
       <div>${a.interactions}</div>
       <div class="status ${cls}">${a.status}</div>
+      <div>${verified}</div>
     `;
 
-    body.appendChild(row);
+    el.appendChild(row);
   });
 }
 
-async function analyzeAgent(){
+/* ANALYZE */
+async function analyze(){
   let input=document.getElementById("agentInput").value.trim();
-  if(!input) return;
+  if(!input)return;
 
   input=input.replace("u/","");
-  const el=document.getElementById("agentResult");
-  el.innerText="Analyzing...";
+  document.getElementById("result").innerText="Analyzing...";
 
   await fetch("/api/scout",{
     method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({ message:`u/${input}`, mode:"scan" })
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:`u/${input}`,mode:"scan"})
   });
 
   await load();
@@ -321,21 +277,44 @@ async function analyzeAgent(){
   const agent=agents.find(a=>a.name.toLowerCase()===input.toLowerCase());
 
   if(agent){
-    el.innerHTML=`u/${agent.name}<br>Score: ${agent.score}<br>Status: ${agent.status}`;
+    document.getElementById("result").innerText=`Score: ${agent.score} | ${agent.status}`;
   }else{
-    el.innerText="Not enough data yet.";
+    document.getElementById("result").innerText="Not enough data";
   }
 }
 
-function scrollToLeaderboard(){
+/* LIVE FEED */
+function startLive(){
+  const el=document.getElementById("liveFeed");
+
+  setInterval(()=>{
+    if(!agents.length)return;
+
+    const a=agents[Math.floor(Math.random()*agents.length)];
+    const actions=["score updated","ranking changed","signal detected"];
+
+    el.innerHTML=`<div class="liveItem">u/${a.name} → ${actions[Math.floor(Math.random()*3)]}</div>`+el.innerHTML;
+  },1500);
+}
+
+/* LOGIN */
+function openLogin(){
+  document.getElementById("loginModal").style.display="flex";
+}
+
+function login(){
+  alert("Login conectado (backend siguiente paso)");
+}
+
+/* SCROLL */
+function scrollToTable(){
   document.querySelector(".table").scrollIntoView({behavior:"smooth"});
 }
 
-function focusInput(){
-  document.getElementById("agentInput").focus();
-}
-
+/* INIT */
 load();
+startLive();
+
 </script>
 
 </body>
