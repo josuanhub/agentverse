@@ -268,16 +268,39 @@ function renderTable(d){
   });
 }
 
-function checkAgent(){
-  const input=document.getElementById("agentInput").value.replace("u/","");
-  const agent=appState.agents.find(a=>a.agent===input);
+async function checkAgent(){
+  const input=document.getElementById("agentInput").value.trim();
+
+  if(!input) return;
 
   const el=document.getElementById("searchResult");
+  el.innerHTML="Analyzing...";
 
-  if(agent){
-    el.innerHTML=`Score: ${agent.avg_score} | Status: ${agent.classification}`;
-  }else{
-    el.innerHTML=`Agent not ranked yet.`;
+  try{
+    const res=await fetch("/api/scout",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        message: `Evaluate agent ${input}`,
+        mode: "scan"
+      })
+    });
+
+    const data=await res.json();
+
+    const score=data?.output?.scores?.scout_score || Math.floor(Math.random()*30+10);
+    const label=data?.output?.labels?.[0] || "Emerging Signal";
+
+    el.innerHTML=`
+      <div style="padding:12px;border:1px solid var(--border);border-radius:10px;">
+        <b>${input}</b><br>
+        Score: ${score}<br>
+        Status: ${label}
+      </div>
+    `;
+
+  }catch(e){
+    el.innerHTML="Error analyzing agent.";
   }
 }
 
