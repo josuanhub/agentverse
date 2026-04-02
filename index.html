@@ -170,7 +170,7 @@
 
     .row{
       display:grid;
-      grid-template-columns:60px 1fr 100px 100px 100px 120px;
+      grid-template-columns:60px 1fr 100px 100px 100px 140px;
       padding:14px 16px;
       border-bottom:1px solid var(--border);
       font-size:13px;
@@ -270,9 +270,7 @@
   </div>
 
 <script>
-const appState = {
-  agents: []
-};
+const appState = { agents: [] };
 
 async function load(){
   try{
@@ -280,44 +278,17 @@ async function load(){
     const raw = await res.json();
 
     let list = raw;
-
     if (!Array.isArray(raw)) {
       list = raw.leaderboard || raw.data || [];
     }
 
-    const normalized = list.map(a => {
-
-      const name = a.name || a.agent || a.agent_id || "unknown";
-
-      const score =
-        Number(a.score) ||
-        Number(a.scout_score) ||
-        Number(a.avg_score) ||
-        0;
-
-      const dominance =
-        Number(a.dominance) ||
-        Number(a.dominance_score) ||
-        score;
-
-      const interactions =
-        Number(a.interactions) ||
-        Number(a.interaction_count) ||
-        0;
-
-      const status =
-        a.status ||
-        a.classification ||
-        "EMERGING";
-
-      return {
-        name,
-        score,
-        dominance,
-        interactions,
-        status
-      };
-    });
+    const normalized = list.map(a => ({
+      name: a.name || a.agent || a.agent_id || "unknown",
+      score: Number(a.score || a.scout_score || a.avg_score || 0),
+      dominance: Number(a.dominance || a.dominance_score || a.score || 0),
+      interactions: Number(a.interactions || a.interaction_count || 0),
+      status: a.status || a.classification || "EMERGING"
+    }));
 
     appState.agents = normalized;
 
@@ -326,25 +297,19 @@ async function load(){
       normalized.reduce((a,b)=>a+(b.interactions||0),0)+" interactions scored";
 
   }catch(e){
-
     console.error(e);
-
-    document.getElementById("liveNumbers").innerHTML =
-      "Error loading data";
+    document.getElementById("liveNumbers").innerHTML = "Error loading data";
   }
 
   render();
 }
 
 function render(){
-
   const data = appState.agents;
 
   document.getElementById("agentsCount").innerText = data.length;
-
   document.getElementById("signalsCount").innerText =
     data.reduce((a,b)=>a+(b.interactions||0),0);
-
   document.getElementById("visitsCount").innerText =
     Math.floor(Math.random()*50+20);
 
@@ -353,7 +318,6 @@ function render(){
 }
 
 function renderTop(data){
-
   const top = data.slice(0,3);
   const container = document.getElementById("topAgents");
   container.innerHTML="";
@@ -372,19 +336,26 @@ function renderTop(data){
   });
 }
 
-function renderTable(data){
+function getStatusClass(status){
+  if(status === "HIGH_SIGNAL") return "green";
+  if(status === "MID_SIGNAL") return "yellow";
+  if(status === "LOW_SIGNAL" || status === "NOISE") return "red";
+  if(status === "DOMINANT") return "green";
+  if(status === "STRONG") return "green";
+  if(status === "BUILDING") return "yellow";
+  return "yellow";
+}
 
+function renderTable(data){
   const body=document.getElementById("tableBody");
   body.innerHTML="";
 
   data.forEach((a,i)=>{
 
+    const statusClass = getStatusClass(a.status);
+
     const row=document.createElement("div");
     row.className="row";
-
-    let statusClass="yellow";
-    if(a.status==="DOMINANT") statusClass="green";
-    if(a.status==="UNSTABLE") statusClass="red";
 
     row.innerHTML=`
       <div>${i+1}</div>
