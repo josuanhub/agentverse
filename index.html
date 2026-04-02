@@ -169,7 +169,7 @@ function parseData(json) {
 ========================= */
 async function loadLeaderboard() {
   try {
-    const res = await fetch(`${API_BASE}/v1/scout/leaderboard`);
+    const res = await fetch(`${API_BASE}?endpoint=leaderboard`)
     const json = await res.json();
 
     console.log("LEADERBOARD:", json);
@@ -189,7 +189,7 @@ async function loadLeaderboard() {
 ========================= */
 async function loadTopAgents() {
   try {
-    const res = await fetch(`${API_BASE}/v1/scout/top-agents`);
+    const res = await fetch(`${API_BASE}?endpoint=leaderboard`)
     const json = await res.json();
 
     console.log("TOP:", json);
