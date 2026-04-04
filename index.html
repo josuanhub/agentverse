@@ -467,7 +467,7 @@
 // ════════════════════════════════════════════════
 // CONFIG — URL real del backend
 // ════════════════════════════════════════════════
-const SCOUT_API = '';
+const SCOUT_API = 'https://urus-backend-production.up.railway.app';
 
 // ════════════════════════════════════════════════
 // VISITS — persistidas en localStorage para ser acumulativas
@@ -530,7 +530,7 @@ async function load() {
 
   try {
     // 1. Leaderboard real
-    const lbRes = await fetch(`/api/scout?endpoint=leaderboard`, {
+    const lbRes = await fetch(`https://urus-backend-production.up.railway.app/v1/leaderboard`, {
       headers: { 'Content-Type': 'application/json' }
     });
     if (!lbRes.ok) throw new Error(`lb_${lbRes.status}`);
@@ -542,14 +542,11 @@ async function load() {
 
     // 2. Status para señales totales
     try {
-      const stRes = await fetch(`/api/scout?endpoint=status`);
+      const stRes = await fetch(`https://urus-backend-production.up.railway.app/v1/status`);
       if (stRes.ok) {
         const stData = await stRes.json();
-        // contar señales desde recent_memory
-        const mem = Array.isArray(stData.recent_memory) ? stData.recent_memory : [];
-        state.totalSignals = stData.total_signals || 
-  state.agents.reduce((s, a) => s + a.interactions, 0);
-          ? mem.length * 8  // aproximación basada en entradas de memoria
+        state.totalSignals = stData.total_signals
+          ? stData.total_signals
           : state.agents.reduce((s, a) => s + a.interactions, 0);
       }
     } catch (_) {
