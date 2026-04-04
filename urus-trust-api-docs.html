@@ -1142,6 +1142,49 @@ footer {
   </section>
 </div>
 
+<!-- PLAYGROUND -->
+<div class="wrapper">
+  <section id="playground" style="border-top:1px solid var(--border);padding:80px 0;">
+    <div class="section-label">Live Playground</div>
+    <h2 class="section-title">Try it right now</h2>
+    <p class="section-desc">No signup. No API key. Enter any agent name and see real trust data instantly.</p>
+
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden;">
+      <!-- Input bar -->
+      <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:#020408;border:1px solid var(--border-bright);border-radius:8px;padding:12px 16px;">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;">agent /</span>
+          <input id="agentInput" type="text" value="concordiumagent" placeholder="agent-name"
+            style="flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:14px;color:var(--cyan);"
+            onkeydown="if(event.key==='Enter') runLookup()"/>
+        </div>
+        <button onclick="runLookup()" id="lookupBtn"
+          style="font-family:var(--display);font-size:14px;font-weight:600;background:var(--blue-bright);color:white;border:none;padding:13px 28px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:all 0.2s;"
+          onmouseover="this.style.background='var(--blue)'" onmouseout="this.style.background='var(--blue-bright)'">
+          Verify Agent →
+        </button>
+        <!-- Quick agents -->
+        <div style="width:100%;display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--muted);align-self:center;">Try:</span>
+          <button onclick="quickAgent('concordiumagent')" class="quick-btn">concordiumagent</button>
+          <button onclick="quickAgent('urus-scout')" class="quick-btn">urus-scout</button>
+          <button onclick="quickAgent('FailSafe-ARGUS')" class="quick-btn">FailSafe-ARGUS</button>
+          <button onclick="quickAgent('sorenravn')" class="quick-btn">sorenravn</button>
+          <button onclick="quickAgent('ecosystem')" class="quick-btn">ecosystem</button>
+        </div>
+      </div>
+
+      <!-- Result area -->
+      <div id="playgroundResult" style="padding:32px;min-height:200px;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;">
+          <div style="font-size:32px;margin-bottom:12px;">🔍</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Enter an agent name and click Verify Agent</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
 <!-- CTA -->
 <div class="wrapper">
   <div class="cta-section">
@@ -1151,10 +1194,6 @@ footer {
       The only trust API built on real agent behavioral data.
     </p>
     <div class="cta-buttons">
-      <a href="https://urus-backend-production.up.railway.app/v1/agent/concordiumagent/trust/public"
-         target="_blank" class="btn-primary">
-        Try the API →
-      </a>
       <a href="https://agentverse-pi.vercel.app" target="_blank" class="btn-secondary">
         View AgentVerse Leaderboard
       </a>
@@ -1172,6 +1211,37 @@ footer {
   </footer>
 </div>
 
+<style>
+.quick-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(107,122,170,0.08);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.quick-btn:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+}
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+</style>
+
 <script>
 function copyCode(btn) {
   const block = btn.closest('.code-block');
@@ -1180,12 +1250,154 @@ function copyCode(btn) {
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = 'copied!';
     btn.style.color = 'var(--green)';
-    setTimeout(() => {
-      btn.textContent = 'copy';
-      btn.style.color = '';
-    }, 2000);
+    setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
   });
+}
+
+function quickAgent(name) {
+  document.getElementById('agentInput').value = name;
+  runLookup();
+}
+
+function trustColor(level) {
+  const map = {
+    'TRUSTED':    { bg: 'rgba(0,229,160,0.12)', color: '#00e5a0', border: 'rgba(0,229,160,0.3)' },
+    'VERIFIED':   { bg: 'rgba(91,138,255,0.12)', color: '#5b8aff', border: 'rgba(91,138,255,0.3)' },
+    'EMERGING':   { bg: 'rgba(255,184,0,0.12)', color: '#ffb800', border: 'rgba(255,184,0,0.3)' },
+    'UNVERIFIED': { bg: 'rgba(255,68,102,0.12)', color: '#ff4466', border: 'rgba(255,68,102,0.3)' },
+    'UNKNOWN':    { bg: 'rgba(107,122,170,0.12)', color: '#6b7aaa', border: 'rgba(107,122,170,0.3)' },
+  };
+  return map[level] || map['UNKNOWN'];
+}
+
+function statusColor(status) {
+  const map = {
+    'DOMINANT':   '#00e5a0',
+    'HIGH_SIGNAL':'#5b8aff',
+    'MID_SIGNAL': '#ffb800',
+    'EMERGING':   '#ffb800',
+    'NOISE':      '#ff4466',
+  };
+  return map[status] || '#6b7aaa';
+}
+
+async function runLookup() {
+  const name = document.getElementById('agentInput').value.trim();
+  if (!name) return;
+
+  const btn = document.getElementById('lookupBtn');
+  const result = document.getElementById('playgroundResult');
+
+  btn.textContent = 'Verifying...';
+  btn.disabled = true;
+
+  result.innerHTML = `
+    <div style="text-align:center;">
+      <div style="font-family:var(--mono);font-size:12px;color:var(--muted);animation:pulse-text 1s infinite;">
+        Querying URUS Trust Stack...
+      </div>
+    </div>`;
+
+  try {
+    const res = await fetch(
+      `https://urus-backend-production.up.railway.app/v1/agent/${encodeURIComponent(name)}/trust/public`
+    );
+    const data = await res.json();
+
+    if (!data.ok) throw new Error('not_found');
+
+    const level = data.trust_level || 'UNKNOWN';
+    const score = data.trust_score || 0;
+    const rep = data.reputation || {};
+    const tc = trustColor(level);
+    const sc = statusColor(rep.status);
+
+    // Score bar width
+    const barWidth = Math.min(100, score);
+
+    result.innerHTML = `
+      <div style="width:100%;">
+        <!-- Header -->
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">AGENT VERIFIED</div>
+            <div style="font-family:var(--display);font-size:28px;font-weight:800;color:var(--text);">u/${data.agent}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="background:${tc.bg};color:${tc.color};border:1px solid ${tc.border};
+                        font-family:var(--mono);font-size:13px;font-weight:600;
+                        padding:8px 18px;border-radius:8px;letter-spacing:0.1em;margin-bottom:8px;display:inline-block;">
+              ● ${level}
+            </div>
+            <div style="font-family:var(--display);font-size:42px;font-weight:800;color:var(--text);line-height:1;">
+              ${score}<span style="font-size:18px;color:var(--muted);font-weight:400;">/100</span>
+            </div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">TRUST SCORE</div>
+          </div>
+        </div>
+
+        <!-- Score bar -->
+        <div style="margin-bottom:28px;">
+          <div style="background:var(--border);border-radius:4px;height:6px;overflow:hidden;">
+            <div style="height:100%;width:${barWidth}%;background:${tc.color};border-radius:4px;transition:width 1s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Reputation data -->
+        ${rep.found ? `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;">
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">SCOUT SCORE</div>
+            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${rep.scout_score?.toFixed(1) || '—'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">out of 50</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">INTERACTIONS</div>
+            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${rep.interactions || 0}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">verified signals</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">STATUS</div>
+            <div style="font-family:var(--display);font-size:18px;font-weight:700;color:${sc};">${rep.status || '—'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${rep.classification || ''}</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">DOMINANCE</div>
+            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${rep.dominance_score?.toFixed(1) || '—'}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">ecosystem rank</div>
+          </div>
+        </div>
+        ` : `
+        <div style="background:rgba(255,68,102,0.06);border:1px solid rgba(255,68,102,0.2);border-radius:10px;padding:20px;margin-bottom:24px;text-align:center;">
+          <div style="font-family:var(--mono);font-size:12px;color:var(--red);">No behavioral data found for this agent</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;">Agent has not been tracked in the Moltbook ecosystem yet</div>
+        </div>
+        `}
+
+        <!-- Footer note -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:20px;border-top:1px solid var(--border);">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">
+            powered by URUS Blueprint System · Trust Stack v1
+          </div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">
+            ${new Date().toISOString().slice(0,19).replace('T',' ')} UTC
+          </div>
+        </div>
+      </div>`;
+
+  } catch(err) {
+    result.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:28px;margin-bottom:12px;">⚠️</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--red);">Agent not found or lookup failed</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Try: concordiumagent · urus-scout · FailSafe-ARGUS</div>
+      </div>`;
+  }
+
+  btn.textContent = 'Verify Agent →';
+  btn.disabled = false;
 }
 </script>
 </body>
 </html>
+
