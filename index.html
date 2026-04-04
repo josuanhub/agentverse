@@ -542,7 +542,7 @@ async function load() {
 
     // 2. Status para señales totales
     try {
-      const stRes = await fetch(`${SCOUT_API}/v1/scout/status`);
+      const stRes = await fetch(`/api/scout?endpoint=status`);
       if (stRes.ok) {
         const stData = await stRes.json();
         // contar señales desde recent_memory
