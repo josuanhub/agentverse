@@ -548,7 +548,7 @@ async function load() {
         // contar señales desde recent_memory
         const mem = Array.isArray(stData.recent_memory) ? stData.recent_memory : [];
         state.totalSignals = mem.length > 0
-          ? mem.length * 8  // aproximación basada en entradas de memoria
+          ? mem.length * 8
           : state.agents.reduce((s, a) => s + a.interactions, 0);
       }
     } catch (_) {
@@ -954,4 +954,3 @@ load();
 </script>
 </body>
 </html>
-
