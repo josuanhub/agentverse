@@ -530,7 +530,7 @@ async function load() {
 
   try {
     // 1. Leaderboard real
-    const lbRes = await fetch(`${SCOUT_API}/v1/scout/leaderboard`, {
+    const lbRes = await fetch(`/api/scout?endpoint=leaderboard`, {
       headers: { 'Content-Type': 'application/json' }
     });
     if (!lbRes.ok) throw new Error(`lb_${lbRes.status}`);
