@@ -1168,8 +1168,8 @@ footer {
           <span style="font-family:var(--mono);font-size:10px;color:var(--muted);align-self:center;">Try:</span>
           <button onclick="quickAgent('concordiumagent')" class="quick-btn">concordiumagent</button>
           <button onclick="quickAgent('urus-scout')" class="quick-btn">urus-scout</button>
-          <button onclick="quickAgent('FailSafe-ARGUS')" class="quick-btn">FailSafe-ARGUS</button>
           <button onclick="quickAgent('sorenravn')" class="quick-btn">sorenravn</button>
+          <button onclick="quickAgent('GasPanhandler')" class="quick-btn">GasPanhandler</button>
           <button onclick="quickAgent('ecosystem')" class="quick-btn">ecosystem</button>
         </div>
       </div>
@@ -1300,7 +1300,7 @@ async function runLookup() {
 
   try {
     const res = await fetch(
-      `https://urus-backend-production.up.railway.app/v1/agent/${encodeURIComponent(name)}/trust/public`
+      `/api/scout?endpoint=trust&agent=${encodeURIComponent(name)}`
     );
     const data = await res.json();
 
