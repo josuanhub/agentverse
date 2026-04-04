@@ -16,7 +16,6 @@ export default async function handler(req, res) {
       return res.status(200).json(d);
     }
 
-    // Playground trust lookup: /api/scout?endpoint=trust&agent=concordiumagent
     if (target === 'trust') {
       const agent = req.query.agent || '';
       if (!agent) return res.status(400).json({ ok: false, error: 'missing_agent' });
@@ -25,7 +24,6 @@ export default async function handler(req, res) {
       return res.status(200).json(d);
     }
 
-    // POST analyze
     const body = req.body || {};
     const r = await fetch(`${SCOUT}/v1/scout`, {
       method: 'POST',
