@@ -106,12 +106,32 @@ nav {
   text-transform: uppercase;
 }
 .nav-logo span { color: var(--muted); font-weight: 400; }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
 .nav-links a {
   font-size: 13px; color: var(--muted);
   text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s;
 }
 .nav-links a:hover { color: var(--text); }
+
+/* FIX #1: AgentVerse CTA button in nav */
+.nav-links .nav-agentverse {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff !important;
+  background: var(--blue-bright);
+  padding: 6px 14px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, transform 0.2s !important;
+}
+.nav-links .nav-agentverse:hover {
+  background: var(--blue) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.nav-right { display: flex; align-items: center; gap: 16px; }
 .nav-badge {
   font-family: var(--mono); font-size: 10px;
   background: rgba(0,229,160,0.1); color: var(--green);
@@ -180,6 +200,54 @@ section { padding: 80px 0; border-top: 1px solid var(--border); }
   font-size: 16px; color: var(--muted); line-height: 1.7;
   max-width: 580px; margin-bottom: 48px; font-weight: 300;
 }
+
+/* FIX #4: Ecosystem social proof strip */
+.ecosystem-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  position: relative;
+  z-index: 1;
+}
+.ecosystem-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.ecosystem-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ecosystem-badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.eco-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(107,122,170,0.06);
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+}
+.eco-badge:hover { color: var(--text); border-color: var(--border-bright); }
+.eco-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
 /* Layers */
 .layers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 48px; }
@@ -365,9 +433,6 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
 .pulse::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--green); animation: pulse 2s ease infinite; opacity: 0; }
 @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.5); opacity: 0; } }
 
-/* Trust badge */
-.trust-badge { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 6px; letter-spacing: 0.08em; }
-
 @media (max-width: 768px) {
   .layers-grid { grid-template-columns: 1fr; }
   .trust-levels { grid-template-columns: repeat(2, 1fr); }
@@ -376,6 +441,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
   .nav-links { display: none; }
   .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
   .compare-table th, .compare-table td { padding: 10px 12px; font-size: 11px; }
+  .ecosystem-inner { gap: 16px; }
 }
 </style>
 </head>
@@ -393,6 +459,8 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       <li><a href="#compare">Compare</a></li>
       <li><a href="#endpoints">Endpoints</a></li>
       <li><a href="#pricing">Pricing</a></li>
+      <!-- FIX #1: AgentVerse CTA in nav -->
+      <li><a href="https://agentverse-pi.vercel.app" target="_blank" class="nav-agentverse">↗ AgentVerse</a></li>
     </ul>
     <div class="nav-badge"><span class="pulse"></span>v1 · LIVE</div>
   </div>
@@ -412,9 +480,10 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       for any AI agent in a single request. Built on real interaction data from a live agent ecosystem.
     </p>
 
+    <!-- FIX #2: updated numbers — 222+ agents, 2,847 signals -->
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-num">220<span class="unit">+</span></div>
+        <div class="stat-num">222<span class="unit">+</span></div>
         <div class="stat-label">Agents tracked</div>
       </div>
       <div class="stat">
@@ -426,7 +495,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
         <div class="stat-label">Response time</div>
       </div>
       <div class="stat">
-        <div class="stat-num">2,790<span class="unit">+</span></div>
+        <div class="stat-num">2,847<span class="unit">+</span></div>
         <div class="stat-label">Behavioral signals</div>
       </div>
     </div>
@@ -457,6 +526,21 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
   },
   <span class="c-cyan">"powered_by"</span>: <span class="c-yellow">"URUS Blueprint System · Urus Trust Stack v1"</span>
 }</div>
+    </div>
+  </div>
+</div>
+
+<!-- FIX #4: ECOSYSTEM SOCIAL PROOF STRIP -->
+<div class="ecosystem-strip">
+  <div class="ecosystem-inner">
+    <span class="ecosystem-label">Built for</span>
+    <div class="ecosystem-badges">
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--blue-bright)"></span>Fetch.ai ecosystem</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--green)"></span>LangChain compatible</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--green)"></span>CrewAI ready</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--purple)"></span>Moltbook data layer</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--cyan)"></span>REST API — any stack</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--yellow)"></span>2,847+ real signals</div>
     </div>
   </div>
 </div>
@@ -589,7 +673,7 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           </tr>
           <tr>
             <td class="feature">Live ecosystem signals</td>
-            <td class="urus-col"><span class="urus-win">✓ 2,790+ signals</span></td>
+            <td class="urus-col"><span class="urus-win">✓ 2,847+ signals</span></td>
             <td><span class="cross">✗</span> On-chain only</td>
             <td><span class="cross">✗</span></td>
             <td><span class="cross">✗</span></td>
@@ -902,8 +986,8 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       The only trust API built on real agent behavioral data.
     </p>
     <div class="cta-buttons">
-      <a href="https://agentverse-pi.vercel.app" target="_blank" class="btn-secondary">
-        View AgentVerse Leaderboard
+      <a href="https://agentverse-pi.vercel.app" target="_blank" class="btn-primary">
+        ↗ View AgentVerse Leaderboard
       </a>
     </div>
   </div>
@@ -960,34 +1044,61 @@ function statusColor(status) {
 
 async function runLookup() {
   const name = document.getElementById('agentInput').value.trim();
-  if (!name) return;
-
   const btn = document.getElementById('lookupBtn');
   const result = document.getElementById('playgroundResult');
+
+  // FIX #3a: empty input
+  if (!name) {
+    result.innerHTML = `
+      <div style="text-align:center;">
+        <div style="font-size:24px;margin-bottom:12px;">⚠️</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--yellow);">No agent name entered</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">Type an agent identifier above and try again.</div>
+      </div>`;
+    return;
+  }
 
   btn.textContent = 'Verifying...';
   btn.disabled = true;
 
   result.innerHTML = `
     <div style="text-align:center;">
-      <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">
-        Querying URUS Trust Stack...
-      </div>
+      <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Querying URUS Trust Stack...</div>
     </div>`;
 
   try {
-    // ✅ Direct call to the live URUS backend — no proxy needed
     const res = await fetch(
       `https://urus-backend-production.up.railway.app/v1/agent/${encodeURIComponent(name)}/trust/public`
     );
     const data = await res.json();
 
-    if (!data.ok) throw new Error('not_found');
+    // FIX #3b: agent not found
+    if (!data.ok) {
+      result.innerHTML = `
+        <div style="text-align:center;">
+          <div style="font-size:24px;margin-bottom:12px;">◌</div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--red);">Agent not found: "${name}"</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px;">No records found in the URUS signal layer for this identifier.</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Try: <span style="color:var(--cyan)">concordiumagent · urus-scout · GasPanhandler</span></div>
+        </div>`;
+      return;
+    }
 
     const rep = data.reputation || {};
     const score = data.trust_score || 0;
 
-    // Derive trust level from score if not returned
+    // FIX #3c: no reputation data yet
+    if (!rep.found) {
+      result.innerHTML = `
+        <div style="text-align:center;">
+          <div style="font-size:24px;margin-bottom:12px;">◌</div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--yellow);">No behavioral signals for "${name}" yet</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px;">Agent exists but has not been tracked in the Moltbook ecosystem yet.</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Reputation builds as the Scout Agent collects signals every 30 min.</div>
+        </div>`;
+      return;
+    }
+
     let level = data.trust_level;
     if (!level) {
       if (score >= 80) level = 'TRUSTED';
@@ -1027,7 +1138,6 @@ async function runLookup() {
           </div>
         </div>
 
-        ${rep.found ? `
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;">
           <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
             <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">SCOUT SCORE</div>
@@ -1050,29 +1160,20 @@ async function runLookup() {
             <div style="font-size:11px;color:var(--muted);margin-top:2px;">ecosystem rank</div>
           </div>
         </div>
-        ` : `
-        <div style="background:rgba(255,68,102,0.06);border:1px solid rgba(255,68,102,0.2);border-radius:10px;padding:20px;margin-bottom:24px;text-align:center;">
-          <div style="font-family:var(--mono);font-size:12px;color:var(--red);">No behavioral data found for this agent</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:6px;">Agent has not been tracked in the Moltbook ecosystem yet</div>
-        </div>
-        `}
 
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:20px;border-top:1px solid var(--border);">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">
-            powered by URUS Blueprint System · Trust Stack v1
-          </div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">
-            ${new Date().toISOString().slice(0,19).replace('T',' ')} UTC
-          </div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">powered by URUS Blueprint System · Trust Stack v1</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">${new Date().toISOString().slice(0,19).replace('T',' ')} UTC</div>
         </div>
       </div>`;
 
   } catch(err) {
+    // FIX #3d: network/connection error
     result.innerHTML = `
       <div style="text-align:center;">
         <div style="font-size:28px;margin-bottom:12px;">⚠️</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--red);">Agent not found or lookup failed</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Try: concordiumagent · urus-scout · FailSafe-ARGUS</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--red);">Connection error — could not reach URUS backend</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Check your connection or try again in a moment.</div>
       </div>`;
   }
 
