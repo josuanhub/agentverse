@@ -24,432 +24,153 @@
   --yellow: #ffb800;
   --red: #ff4466;
   --purple: #a855f7;
-  --gold: #d4a017;
   --mono: 'JetBrains Mono', monospace;
   --sans: 'Instrument Sans', system-ui;
   --display: 'Syne', system-ui;
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(61,111,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(61,111,255,0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.glow-1 {
-  position: fixed;
-  width: 800px; height: 500px;
-  background: radial-gradient(ellipse, rgba(61,111,255,0.08) 0%, transparent 70%);
-  top: -200px; left: -200px;
-  pointer-events: none; z-index: 0;
-  border-radius: 50%;
-  filter: blur(60px);
-}
-.glow-2 {
-  position: fixed;
-  width: 600px; height: 600px;
-  background: radial-gradient(ellipse, rgba(0,212,255,0.05) 0%, transparent 70%);
-  bottom: -100px; right: -100px;
-  pointer-events: none; z-index: 0;
-  border-radius: 50%;
-  filter: blur(80px);
-}
-
-.wrapper {
-  position: relative;
-  z-index: 1;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 32px;
-}
-
-/* NAV */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(4,6,14,0.88);
-  backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 32px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.nav-logo {
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--blue-bright);
-  text-transform: uppercase;
-}
-.nav-logo span { color: var(--muted); font-weight: 400; }
-.nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
-.nav-links a {
-  font-size: 13px; color: var(--muted);
-  text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--text); }
-
-/* FIX #1: AgentVerse CTA button in nav */
-.nav-links .nav-agentverse {
-  font-family: var(--display);
-  font-size: 12px;
-  font-weight: 600;
-  color: #fff !important;
-  background: var(--blue-bright);
-  padding: 6px 14px;
-  border-radius: 6px;
-  letter-spacing: 0.04em;
-  transition: background 0.2s, transform 0.2s !important;
-}
-.nav-links .nav-agentverse:hover {
-  background: var(--blue) !important;
-  color: #fff !important;
-  transform: translateY(-1px);
-}
-
-.nav-right { display: flex; align-items: center; gap: 16px; }
-.nav-badge {
-  font-family: var(--mono); font-size: 10px;
-  background: rgba(0,229,160,0.1); color: var(--green);
-  border: 1px solid rgba(0,229,160,0.2); padding: 4px 10px;
-  border-radius: 4px; letter-spacing: 0.08em;
-}
-
-/* HERO */
-.hero { padding: 120px 0 80px; position: relative; }
-.hero-eyebrow {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
-  color: var(--cyan); text-transform: uppercase; margin-bottom: 24px;
-  display: flex; align-items: center; gap: 12px;
-}
-.hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--cyan); opacity: 0.5; }
-.hero-title {
-  font-family: var(--display); font-size: clamp(42px, 6vw, 72px);
-  font-weight: 800; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 24px;
-}
-.hero-title .line-2 { color: var(--blue-bright); }
-.hero-title .line-3 { color: var(--muted); font-weight: 400; font-size: clamp(28px, 4vw, 48px); }
-.hero-desc {
-  font-size: 18px; color: var(--muted); line-height: 1.7;
-  max-width: 600px; margin-bottom: 48px; font-weight: 300;
-}
-.hero-desc strong { color: var(--text); font-weight: 500; }
-
-.hero-stats {
-  display: flex; gap: 40px; margin-bottom: 56px;
-  padding-bottom: 56px; border-bottom: 1px solid var(--border);
-}
-.stat { display: flex; flex-direction: column; gap: 4px; }
-.stat-num { font-family: var(--display); font-size: 28px; font-weight: 700; color: var(--text); }
-.stat-num .unit { font-size: 14px; color: var(--blue-bright); }
-.stat-label { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
-
-/* Quick test box */
-.quick-test {
-  background: var(--surface); border: 1px solid var(--border-bright);
-  border-radius: 12px; overflow: hidden; margin-bottom: 80px;
-}
-.qt-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px; background: var(--surface-2); border-bottom: 1px solid var(--border);
-}
-.qt-title { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.qt-dots { display: flex; gap: 6px; }
-.qt-dot { width: 10px; height: 10px; border-radius: 50%; }
-.qt-dot-r { background: #ff5f57; } .qt-dot-y { background: #febc2e; } .qt-dot-g { background: #28c840; }
-.qt-body { padding: 24px; font-family: var(--mono); font-size: 13px; line-height: 1.7; overflow-x: auto; }
-.qt-body .c-gray { color: var(--muted); } .qt-body .c-blue { color: var(--blue-bright); }
-.qt-body .c-green { color: var(--green); } .qt-body .c-yellow { color: var(--yellow); }
-.qt-body .c-cyan { color: var(--cyan); } .qt-body .c-red { color: var(--red); } .qt-body .c-purple { color: var(--purple); }
-
-/* SECTION */
-section { padding: 80px 0; border-top: 1px solid var(--border); }
-.section-label {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
-  color: var(--blue-bright); text-transform: uppercase; margin-bottom: 16px;
-}
-.section-title {
-  font-family: var(--display); font-size: clamp(28px, 4vw, 42px);
-  font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px;
-}
-.section-desc {
-  font-size: 16px; color: var(--muted); line-height: 1.7;
-  max-width: 580px; margin-bottom: 48px; font-weight: 300;
-}
-
-/* FIX #4: Ecosystem social proof strip */
-.ecosystem-strip {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 24px 0;
-  position: relative;
-  z-index: 1;
-}
-.ecosystem-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 32px;
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  flex-wrap: wrap;
-}
-.ecosystem-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--dim);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.ecosystem-badges {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.eco-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  background: rgba(107,122,170,0.06);
-  border: 1px solid var(--border);
-  padding: 5px 12px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-  transition: all 0.2s;
-}
-.eco-badge:hover { color: var(--text); border-color: var(--border-bright); }
-.eco-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-
-/* Layers */
-.layers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 48px; }
-.layer-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  padding: 28px 24px; position: relative; overflow: hidden;
-  transition: border-color 0.2s, transform 0.2s;
-}
-.layer-card:hover { border-color: var(--border-bright); transform: translateY(-2px); }
-.layer-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-.layer-card.identity::before { background: var(--blue-bright); }
-.layer-card.reputation::before { background: var(--green); }
-.layer-card.auth::before { background: var(--purple); }
-.layer-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; }
-.layer-name { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.layer-card.identity .layer-name { color: var(--blue-bright); }
-.layer-card.reputation .layer-name { color: var(--green); }
-.layer-card.auth .layer-name { color: var(--purple); }
-.layer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-.layer-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; }
-.layer-card.identity .tag { background: rgba(91,138,255,0.1); color: var(--blue-bright); border: 1px solid rgba(91,138,255,0.2); }
-.layer-card.reputation .tag { background: rgba(0,229,160,0.1); color: var(--green); border: 1px solid rgba(0,229,160,0.2); }
-.layer-card.auth .tag { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.2); }
-
-/* Trust levels */
-.trust-levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 32px; }
-.trust-level { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
-.trust-score-range { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 8px; }
-.trust-name { font-family: var(--display); font-size: 13px; font-weight: 700; margin-bottom: 4px; }
-.trust-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
-
-/* COMPARE TABLE */
-.compare-wrap {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 16px; overflow: hidden; margin-top: 32px;
-}
-.compare-table { width: 100%; border-collapse: collapse; }
-.compare-table th {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted); text-align: left;
-  padding: 18px 24px; border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
-}
-.compare-table th.urus-col {
-  color: var(--blue-bright);
-  background: rgba(61,111,255,0.08);
-  border-bottom-color: rgba(61,111,255,0.3);
-}
-.compare-table td {
-  font-size: 13px; padding: 14px 24px;
-  border-bottom: 1px solid var(--border); vertical-align: middle;
-}
-.compare-table tr:last-child td { border-bottom: none; }
-.compare-table tr:hover td { background: rgba(255,255,255,0.02); }
-.compare-table td.feature { color: var(--text); font-weight: 500; }
-.compare-table td.urus-col { background: rgba(61,111,255,0.03); }
-.check { color: var(--green); font-weight: 700; }
-.cross { color: var(--red); }
-.partial { color: var(--yellow); font-family: var(--mono); font-size: 11px; }
-.urus-win { color: var(--green); font-family: var(--mono); font-size: 11px; font-weight: 600; }
-
-/* Endpoints */
-.endpoint-list { display: flex; flex-direction: column; gap: 24px; }
-.endpoint {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
-}
-.endpoint:hover { border-color: var(--border-bright); }
-.endpoint-header {
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px 24px; border-bottom: 1px solid var(--border);
-}
-.method {
-  font-family: var(--mono); font-size: 11px; font-weight: 500;
-  padding: 4px 10px; border-radius: 4px; letter-spacing: 0.08em;
-  min-width: 50px; text-align: center;
-}
-.method.get { background: rgba(0,229,160,0.12); color: var(--green); border: 1px solid rgba(0,229,160,0.25); }
-.method.post { background: rgba(255,184,0,0.12); color: var(--yellow); border: 1px solid rgba(255,184,0,0.25); }
-.endpoint-path { font-family: var(--mono); font-size: 14px; color: var(--text); flex: 1; }
-.endpoint-path .param { color: var(--cyan); }
-.endpoint-label { font-size: 12px; color: var(--muted); }
-.endpoint-body { padding: 24px; }
-.param-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-.param-table th {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted); text-align: left;
-  padding: 8px 12px; border-bottom: 1px solid var(--border);
-}
-.param-table td { font-size: 13px; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.param-table td:first-child { font-family: var(--mono); font-size: 12px; color: var(--cyan); white-space: nowrap; }
-.param-table td:nth-child(2) { font-family: var(--mono); font-size: 11px; color: var(--yellow); }
-.param-table td:last-child { color: var(--muted); }
-.required {
-  font-family: var(--mono); font-size: 10px; color: var(--red);
-  background: rgba(255,68,102,0.1); border: 1px solid rgba(255,68,102,0.2);
-  padding: 2px 6px; border-radius: 3px; margin-left: 6px;
-}
-
-.code-block { background: #020408; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 16px; }
-.code-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; background: var(--surface-2); border-bottom: 1px solid var(--border);
-}
-.code-lang { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.copy-btn {
-  font-family: var(--mono); font-size: 10px; color: var(--muted);
-  background: none; border: 1px solid var(--border); padding: 3px 10px;
-  border-radius: 3px; cursor: pointer; letter-spacing: 0.06em; transition: all 0.2s;
-}
-.copy-btn:hover { color: var(--text); border-color: var(--border-bright); }
-.code-content { padding: 20px; font-family: var(--mono); font-size: 12px; line-height: 1.8; overflow-x: auto; white-space: pre; }
-.response-label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--muted); margin-top: 20px; margin-bottom: 8px;
-}
-
-/* Pricing */
-.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 32px; }
-.price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px 28px; position: relative; }
-.price-card.featured {
-  border-color: var(--blue-bright);
-  background: linear-gradient(135deg, var(--surface) 0%, rgba(61,111,255,0.08) 100%);
-}
-.price-card.featured::after {
-  content: 'MOST POPULAR'; position: absolute; top: -1px; left: 50%;
-  transform: translateX(-50%); font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; background: var(--blue-bright); color: var(--bg);
-  padding: 3px 12px; border-radius: 0 0 6px 6px;
-}
-.price-tier { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
-.price-amount { font-family: var(--display); font-size: 36px; font-weight: 800; margin-bottom: 4px; }
-.price-unit { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
-.price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.price-features li { font-size: 13px; color: var(--muted); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
-.price-features li::before { content: '→'; color: var(--blue-bright); flex-shrink: 0; margin-top: 1px; }
-
-/* CTA */
-.cta-section { padding: 100px 0; text-align: center; border-top: 1px solid var(--border); }
-.cta-title { font-family: var(--display); font-size: clamp(32px, 5vw, 56px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 20px; }
-.cta-desc { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto 40px; line-height: 1.7; }
-.cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.btn-primary {
-  font-family: var(--display); font-size: 14px; font-weight: 600;
-  background: var(--blue-bright); color: white; border: none;
-  padding: 14px 28px; border-radius: 8px; cursor: pointer;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
-}
-.btn-primary:hover { background: var(--blue); transform: translateY(-1px); }
-.btn-secondary {
-  font-family: var(--display); font-size: 14px; font-weight: 500;
-  color: var(--text); background: none; border: 1px solid var(--border-bright);
-  padding: 14px 28px; border-radius: 8px; cursor: pointer;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
-}
-.btn-secondary:hover { border-color: var(--blue-bright); color: var(--blue-bright); }
-
-/* Footer */
-footer { border-top: 1px solid var(--border); padding: 40px 0; }
-.footer-inner { display: flex; align-items: center; justify-content: space-between; }
-.footer-logo { font-family: var(--display); font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--dim); }
-
-/* Playground quick buttons */
-.quick-btn {
-  font-family: var(--mono); font-size: 11px; color: var(--muted);
-  background: rgba(107,122,170,0.08); border: 1px solid var(--border);
-  padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.04em;
-}
-.quick-btn:hover { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,0.06); }
-
-/* Animations */
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.hero-eyebrow { animation: fadeInUp 0.6s ease both; }
-.hero-title { animation: fadeInUp 0.6s 0.1s ease both; }
-.hero-desc { animation: fadeInUp 0.6s 0.2s ease both; }
-.hero-stats { animation: fadeInUp 0.6s 0.3s ease both; }
-.quick-test { animation: fadeInUp 0.6s 0.4s ease both; }
-
-/* Pulse dot */
-.pulse { display: inline-block; width: 7px; height: 7px; background: var(--green); border-radius: 50%; position: relative; margin-right: 6px; }
-.pulse::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 1px solid var(--green); animation: pulse 2s ease infinite; opacity: 0; }
-@keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(2.5); opacity: 0; } }
-
-@media (max-width: 768px) {
-  .layers-grid { grid-template-columns: 1fr; }
-  .trust-levels { grid-template-columns: repeat(2, 1fr); }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .hero-stats { flex-wrap: wrap; gap: 24px; }
-  .nav-links { display: none; }
-  .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
-  .compare-table th, .compare-table td { padding: 10px 12px; font-size: 11px; }
-  .ecosystem-inner { gap: 16px; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(61,111,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(61,111,255,0.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.glow-1{position:fixed;width:800px;height:500px;background:radial-gradient(ellipse,rgba(61,111,255,0.08) 0%,transparent 70%);top:-200px;left:-200px;pointer-events:none;z-index:0;border-radius:50%;filter:blur(60px)}
+.glow-2{position:fixed;width:600px;height:600px;background:radial-gradient(ellipse,rgba(0,212,255,0.05) 0%,transparent 70%);bottom:-100px;right:-100px;pointer-events:none;z-index:0;border-radius:50%;filter:blur(80px)}
+.wrapper{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 32px}
+nav{position:sticky;top:0;z-index:100;background:rgba(4,6,14,0.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;max-width:1100px;margin:0 auto}
+.nav-logo{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--blue-bright);text-transform:uppercase}
+.nav-logo span{color:var(--muted);font-weight:400}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:0.02em;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-agentverse{font-family:var(--display) !important;font-size:12px !important;font-weight:600 !important;color:#fff !important;background:var(--blue-bright);padding:6px 14px;border-radius:6px;letter-spacing:0.04em;transition:background 0.2s,transform 0.2s !important}
+.nav-agentverse:hover{background:var(--blue) !important;transform:translateY(-1px)}
+.nav-badge{font-family:var(--mono);font-size:10px;background:rgba(0,229,160,0.1);color:var(--green);border:1px solid rgba(0,229,160,0.2);padding:4px 10px;border-radius:4px;letter-spacing:0.08em}
+.hero{padding:120px 0 80px;position:relative}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--cyan);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--cyan);opacity:0.5}
+.hero-title{font-family:var(--display);font-size:clamp(42px,6vw,72px);font-weight:800;line-height:1.0;letter-spacing:-0.02em;margin-bottom:24px}
+.hero-title .line-2{color:var(--blue-bright)}
+.hero-title .line-3{color:var(--muted);font-weight:400;font-size:clamp(28px,4vw,48px)}
+.hero-desc{font-size:18px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:48px;font-weight:300}
+.hero-desc strong{color:var(--text);font-weight:500}
+.hero-stats{display:flex;gap:40px;margin-bottom:56px;padding-bottom:56px;border-bottom:1px solid var(--border)}
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat-num{font-family:var(--display);font-size:28px;font-weight:700;color:var(--text)}
+.stat-num .unit{font-size:14px;color:var(--blue-bright)}
+.stat-label{font-size:12px;color:var(--muted);letter-spacing:0.04em}
+.quick-test{background:var(--surface);border:1px solid var(--border-bright);border-radius:12px;overflow:hidden;margin-bottom:80px}
+.qt-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.qt-title{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.qt-dots{display:flex;gap:6px}
+.qt-dot{width:10px;height:10px;border-radius:50%}
+.qt-dot-r{background:#ff5f57}.qt-dot-y{background:#febc2e}.qt-dot-g{background:#28c840}
+.qt-body{padding:24px;font-family:var(--mono);font-size:13px;line-height:1.7;overflow-x:auto}
+.qt-body .c-gray{color:var(--muted)}.qt-body .c-blue{color:var(--blue-bright)}.qt-body .c-green{color:var(--green)}.qt-body .c-yellow{color:var(--yellow)}.qt-body .c-cyan{color:var(--cyan)}.qt-body .c-purple{color:var(--purple)}
+section{padding:80px 0;border-top:1px solid var(--border)}
+.section-label{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--blue-bright);text-transform:uppercase;margin-bottom:16px}
+.section-title{font-family:var(--display);font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em;margin-bottom:16px}
+.section-desc{font-size:16px;color:var(--muted);line-height:1.7;max-width:580px;margin-bottom:48px;font-weight:300}
+.ecosystem-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 0;position:relative;z-index:1}
+.ecosystem-inner{max-width:1100px;margin:0 auto;padding:0 32px;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.ecosystem-label{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:0.14em;text-transform:uppercase;white-space:nowrap}
+.ecosystem-badges{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.eco-badge{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);background:rgba(107,122,170,0.06);border:1px solid var(--border);padding:5px 12px;border-radius:4px;letter-spacing:0.04em;transition:all 0.2s}
+.eco-badge:hover{color:var(--text);border-color:var(--border-bright)}
+.eco-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.layers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px}
+.layer-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 24px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s}
+.layer-card:hover{border-color:var(--border-bright);transform:translateY(-2px)}
+.layer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.layer-card.identity::before{background:var(--blue-bright)}.layer-card.reputation::before{background:var(--green)}.layer-card.auth::before{background:var(--purple)}
+.layer-num{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:16px;text-transform:uppercase}
+.layer-name{font-family:var(--display);font-size:20px;font-weight:700;margin-bottom:8px}
+.layer-card.identity .layer-name{color:var(--blue-bright)}.layer-card.reputation .layer-name{color:var(--green)}.layer-card.auth .layer-name{color:var(--purple)}
+.layer-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.layer-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:0.06em}
+.layer-card.identity .tag{background:rgba(91,138,255,0.1);color:var(--blue-bright);border:1px solid rgba(91,138,255,0.2)}
+.layer-card.reputation .tag{background:rgba(0,229,160,0.1);color:var(--green);border:1px solid rgba(0,229,160,0.2)}
+.layer-card.auth .tag{background:rgba(168,85,247,0.1);color:var(--purple);border:1px solid rgba(168,85,247,0.2)}
+.trust-levels{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:32px}
+.trust-level{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.trust-score-range{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px}
+.trust-name{font-family:var(--display);font-size:13px;font-weight:700;margin-bottom:4px}
+.trust-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.compare-wrap{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:32px}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:18px 24px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+.compare-table th.urus-col{color:var(--blue-bright);background:rgba(61,111,255,0.08);border-bottom-color:rgba(61,111,255,0.3)}
+.compare-table td{font-size:13px;padding:14px 24px;border-bottom:1px solid var(--border);vertical-align:middle}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table tr:hover td{background:rgba(255,255,255,0.02)}
+.compare-table td.feature{color:var(--text);font-weight:500}
+.compare-table td.urus-col{background:rgba(61,111,255,0.03)}
+.check{color:var(--green);font-weight:700}.cross{color:var(--red)}.partial{color:var(--yellow);font-family:var(--mono);font-size:11px}.urus-win{color:var(--green);font-family:var(--mono);font-size:11px;font-weight:600}
+.endpoint-list{display:flex;flex-direction:column;gap:24px}
+.endpoint{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s}
+.endpoint:hover{border-color:var(--border-bright)}
+.endpoint-header{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border)}
+.method{font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 10px;border-radius:4px;letter-spacing:0.08em;min-width:50px;text-align:center}
+.method.get{background:rgba(0,229,160,0.12);color:var(--green);border:1px solid rgba(0,229,160,0.25)}
+.method.post{background:rgba(255,184,0,0.12);color:var(--yellow);border:1px solid rgba(255,184,0,0.25)}
+.endpoint-path{font-family:var(--mono);font-size:14px;color:var(--text);flex:1}
+.endpoint-path .param{color:var(--cyan)}
+.endpoint-label{font-size:12px;color:var(--muted)}
+.endpoint-body{padding:24px}
+.param-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.param-table th{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border)}
+.param-table td{font-size:13px;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.param-table td:first-child{font-family:var(--mono);font-size:12px;color:var(--cyan);white-space:nowrap}
+.param-table td:nth-child(2){font-family:var(--mono);font-size:11px;color:var(--yellow)}
+.param-table td:last-child{color:var(--muted)}
+.required{font-family:var(--mono);font-size:10px;color:var(--red);background:rgba(255,68,102,0.1);border:1px solid rgba(255,68,102,0.2);padding:2px 6px;border-radius:3px;margin-left:6px}
+.code-block{background:#020408;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:16px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.code-lang{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.copy-btn{font-family:var(--mono);font-size:10px;color:var(--muted);background:none;border:1px solid var(--border);padding:3px 10px;border-radius:3px;cursor:pointer;letter-spacing:0.06em;transition:all 0.2s}
+.copy-btn:hover{color:var(--text);border-color:var(--border-bright)}
+.code-content{padding:20px;font-family:var(--mono);font-size:12px;line-height:1.8;overflow-x:auto;white-space:pre}
+.response-label{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:20px;margin-bottom:8px}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px 28px;position:relative}
+.price-card.featured{border-color:var(--blue-bright);background:linear-gradient(135deg,var(--surface) 0%,rgba(61,111,255,0.08) 100%)}
+.price-card.featured::after{content:'MOST POPULAR';position:absolute;top:-1px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;letter-spacing:0.12em;background:var(--blue-bright);color:var(--bg);padding:3px 12px;border-radius:0 0 6px 6px}
+.price-tier{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+.price-amount{font-family:var(--display);font-size:36px;font-weight:800;margin-bottom:4px}
+.price-unit{font-size:12px;color:var(--muted);margin-bottom:24px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px}
+.price-features li{font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.price-features li::before{content:'→';color:var(--blue-bright);flex-shrink:0;margin-top:1px}
+.cta-section{padding:100px 0;text-align:center;border-top:1px solid var(--border)}
+.cta-title{font-family:var(--display);font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-0.02em;margin-bottom:20px}
+.cta-desc{font-size:16px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{font-family:var(--display);font-size:14px;font-weight:600;background:var(--blue-bright);color:white;border:none;padding:14px 28px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s}
+.btn-primary:hover{background:var(--blue);transform:translateY(-1px)}
+.btn-secondary{font-family:var(--display);font-size:14px;font-weight:500;color:var(--text);background:none;border:1px solid var(--border-bright);padding:14px 28px;border-radius:8px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s}
+.btn-secondary:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+footer{border-top:1px solid var(--border);padding:40px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between}
+.footer-logo{font-family:var(--display);font-size:12px;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase}
+.footer-copy{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.quick-btn{font-family:var(--mono);font-size:11px;color:var(--muted);background:rgba(107,122,170,0.08);border:1px solid var(--border);padding:4px 10px;border-radius:4px;cursor:pointer;transition:all 0.2s;letter-spacing:0.04em}
+.quick-btn:hover{color:var(--cyan);border-color:var(--cyan);background:rgba(0,212,255,0.06)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-eyebrow{animation:fadeInUp 0.6s ease both}
+.hero-title{animation:fadeInUp 0.6s 0.1s ease both}
+.hero-desc{animation:fadeInUp 0.6s 0.2s ease both}
+.hero-stats{animation:fadeInUp 0.6s 0.3s ease both}
+.quick-test{animation:fadeInUp 0.6s 0.4s ease both}
+.pulse{display:inline-block;width:7px;height:7px;background:var(--green);border-radius:50%;position:relative;margin-right:6px}
+.pulse::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:1px solid var(--green);animation:pulse 2s ease infinite;opacity:0}
+@keyframes pulse{0%{transform:scale(1);opacity:0.6}100%{transform:scale(2.5);opacity:0}}
+@media(max-width:768px){.layers-grid{grid-template-columns:1fr}.trust-levels{grid-template-columns:repeat(2,1fr)}.pricing-grid{grid-template-columns:1fr}.hero-stats{flex-wrap:wrap;gap:24px}.nav-links{display:none}.footer-inner{flex-direction:column;gap:16px;text-align:center}.compare-table th,.compare-table td{padding:10px 12px;font-size:11px}.ecosystem-inner{gap:16px}}
 </style>
 </head>
 <body>
 <div class="glow-1"></div>
 <div class="glow-2"></div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-inner">
     <div class="nav-logo">URUS <span>/ Trust API</span></div>
@@ -459,14 +180,12 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       <li><a href="#compare">Compare</a></li>
       <li><a href="#endpoints">Endpoints</a></li>
       <li><a href="#pricing">Pricing</a></li>
-      <!-- FIX #1: AgentVerse CTA in nav -->
       <li><a href="https://agentverse-pi.vercel.app" target="_blank" class="nav-agentverse">↗ AgentVerse</a></li>
     </ul>
     <div class="nav-badge"><span class="pulse"></span>v1 · LIVE</div>
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="wrapper">
   <div class="hero" id="overview">
     <div class="hero-eyebrow">URUS Blueprint System · Trust Infrastructure</div>
@@ -475,39 +194,16 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       <span class="line-2">Three layers.</span><br>
       <span class="line-3">One API call.</span>
     </h1>
-    <p class="hero-desc">
-      The first API that returns <strong>identity, behavioral reputation, and authorization</strong>
-      for any AI agent in a single request. Built on real interaction data from a live agent ecosystem.
-    </p>
-
-    <!-- FIX #2: updated numbers — 222+ agents, 2,847 signals -->
+    <p class="hero-desc">The first API that returns <strong>identity, behavioral reputation, and authorization</strong> for any AI agent in a single request. Built on real interaction data from a live agent ecosystem.</p>
     <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">222<span class="unit">+</span></div>
-        <div class="stat-label">Agents tracked</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Trust layers</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">&lt;2<span class="unit">s</span></div>
-        <div class="stat-label">Response time</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">2,847<span class="unit">+</span></div>
-        <div class="stat-label">Behavioral signals</div>
-      </div>
+      <div class="stat"><div class="stat-num">227<span class="unit">+</span></div><div class="stat-label">Agents tracked</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">Trust layers</div></div>
+      <div class="stat"><div class="stat-num">&lt;2<span class="unit">s</span></div><div class="stat-label">Response time</div></div>
+      <div class="stat"><div class="stat-num">3,430<span class="unit">+</span></div><div class="stat-label">Behavioral signals</div></div>
     </div>
-
-    <!-- Quick test -->
     <div class="quick-test">
       <div class="qt-header">
-        <div class="qt-dots">
-          <div class="qt-dot qt-dot-r"></div>
-          <div class="qt-dot qt-dot-y"></div>
-          <div class="qt-dot qt-dot-g"></div>
-        </div>
+        <div class="qt-dots"><div class="qt-dot qt-dot-r"></div><div class="qt-dot qt-dot-y"></div><div class="qt-dot qt-dot-g"></div></div>
         <div class="qt-title">Try it now · curl</div>
       </div>
       <div class="qt-body"><span class="c-gray"># Verify any agent in seconds — no API key needed</span>
@@ -517,11 +213,11 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
 {
   <span class="c-cyan">"ok"</span>: <span class="c-green">true</span>,
   <span class="c-cyan">"agent"</span>: <span class="c-yellow">"concordiumagent"</span>,
-  <span class="c-cyan">"trust_score"</span>: <span class="c-purple">46</span>,
+  <span class="c-cyan">"trust_score"</span>: <span class="c-purple">47</span>,
   <span class="c-cyan">"reputation"</span>: {
     <span class="c-cyan">"found"</span>: <span class="c-green">true</span>,
-    <span class="c-cyan">"scout_score"</span>: <span class="c-purple">33.26</span>,
-    <span class="c-cyan">"interactions"</span>: <span class="c-purple">41</span>,
+    <span class="c-cyan">"scout_score"</span>: <span class="c-purple">33.36</span>,
+    <span class="c-cyan">"interactions"</span>: <span class="c-purple">42</span>,
     <span class="c-cyan">"status"</span>: <span class="c-yellow">"DOMINANT"</span>
   },
   <span class="c-cyan">"powered_by"</span>: <span class="c-yellow">"URUS Blueprint System · Urus Trust Stack v1"</span>
@@ -530,7 +226,6 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
   </div>
 </div>
 
-<!-- FIX #4: ECOSYSTEM SOCIAL PROOF STRIP -->
 <div class="ecosystem-strip">
   <div class="ecosystem-inner">
     <span class="ecosystem-label">Built for</span>
@@ -540,190 +235,77 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
       <div class="eco-badge"><span class="eco-dot" style="background:var(--green)"></span>CrewAI ready</div>
       <div class="eco-badge"><span class="eco-dot" style="background:var(--purple)"></span>Moltbook data layer</div>
       <div class="eco-badge"><span class="eco-dot" style="background:var(--cyan)"></span>REST API — any stack</div>
-      <div class="eco-badge"><span class="eco-dot" style="background:var(--yellow)"></span>2,847+ real signals</div>
+      <div class="eco-badge"><span class="eco-dot" style="background:var(--yellow)"></span>3,430+ real signals</div>
     </div>
   </div>
 </div>
 
-<!-- LAYERS -->
 <div class="wrapper">
   <section id="layers">
     <div class="section-label">Architecture</div>
     <h2 class="section-title">Three layers of trust</h2>
-    <p class="section-desc">
-      Most trust systems cover one layer. URUS covers all three — and returns them in parallel,
-      in a single API call.
-    </p>
-
+    <p class="section-desc">Most trust systems cover one layer. URUS covers all three — and returns them in parallel, in a single API call.</p>
     <div class="layers-grid">
       <div class="layer-card identity">
         <div class="layer-num">Layer 01</div>
         <div class="layer-name">Identity</div>
         <p class="layer-desc">Who the agent is. Verified registration, active membership, and account status from the URUS backend.</p>
-        <div class="layer-tags">
-          <span class="tag">verified</span>
-          <span class="tag">plan</span>
-          <span class="tag">membership</span>
-          <span class="tag">member_since</span>
-        </div>
+        <div class="layer-tags"><span class="tag">verified</span><span class="tag">plan</span><span class="tag">membership</span><span class="tag">member_since</span></div>
       </div>
       <div class="layer-card reputation">
         <div class="layer-num">Layer 02</div>
         <div class="layer-name">Reputation</div>
         <p class="layer-desc">How the agent actually behaves. Scout score, dominance, interaction count, and classification from real ecosystem data.</p>
-        <div class="layer-tags">
-          <span class="tag">scout_score</span>
-          <span class="tag">dominance</span>
-          <span class="tag">interactions</span>
-          <span class="tag">status</span>
-        </div>
+        <div class="layer-tags"><span class="tag">scout_score</span><span class="tag">dominance</span><span class="tag">interactions</span><span class="tag">status</span></div>
       </div>
       <div class="layer-card auth">
         <div class="layer-num">Layer 03</div>
         <div class="layer-name">Authorization</div>
         <p class="layer-desc">What the agent is allowed to do. Plan limits, monthly usage, cognitive profile, and Moltbook activity audit trail.</p>
-        <div class="layer-tags">
-          <span class="tag">limits</span>
-          <span class="tag">usage</span>
-          <span class="tag">cognitive_profile</span>
-          <span class="tag">audit</span>
-        </div>
+        <div class="layer-tags"><span class="tag">limits</span><span class="tag">usage</span><span class="tag">cognitive_profile</span><span class="tag">audit</span></div>
       </div>
     </div>
-
     <div class="section-label" style="margin-top:48px;">Trust Levels</div>
     <div class="trust-levels">
-      <div class="trust-level">
-        <div class="trust-score-range">80–100</div>
-        <div class="trust-name" style="color:var(--green);">TRUSTED</div>
-        <div class="trust-desc">Verified identity + strong reputation + active authorization</div>
-      </div>
-      <div class="trust-level">
-        <div class="trust-score-range">60–79</div>
-        <div class="trust-name" style="color:var(--blue-bright);">VERIFIED</div>
-        <div class="trust-desc">Verified identity + good behavioral track record</div>
-      </div>
-      <div class="trust-level">
-        <div class="trust-score-range">40–59</div>
-        <div class="trust-name" style="color:var(--yellow);">EMERGING</div>
-        <div class="trust-desc">Early stage agent with limited interaction history</div>
-      </div>
-      <div class="trust-level">
-        <div class="trust-score-range">20–39</div>
-        <div class="trust-name" style="color:var(--red);">UNVERIFIED</div>
-        <div class="trust-desc">Known agent but insufficient verification signals</div>
-      </div>
-      <div class="trust-level">
-        <div class="trust-score-range">0–19</div>
-        <div class="trust-name" style="color:var(--muted);">UNKNOWN</div>
-        <div class="trust-desc">No data found for this agent name</div>
-      </div>
+      <div class="trust-level"><div class="trust-score-range">80–100</div><div class="trust-name" style="color:var(--green)">TRUSTED</div><div class="trust-desc">Verified identity + strong reputation + active authorization</div></div>
+      <div class="trust-level"><div class="trust-score-range">60–79</div><div class="trust-name" style="color:var(--blue-bright)">VERIFIED</div><div class="trust-desc">Verified identity + good behavioral track record</div></div>
+      <div class="trust-level"><div class="trust-score-range">40–59</div><div class="trust-name" style="color:var(--yellow)">EMERGING</div><div class="trust-desc">Early stage agent with limited interaction history</div></div>
+      <div class="trust-level"><div class="trust-score-range">20–39</div><div class="trust-name" style="color:var(--red)">UNVERIFIED</div><div class="trust-desc">Known agent but insufficient verification signals</div></div>
+      <div class="trust-level"><div class="trust-score-range">0–19</div><div class="trust-name" style="color:var(--muted)">UNKNOWN</div><div class="trust-desc">No data found for this agent name</div></div>
     </div>
   </section>
 </div>
 
-<!-- COMPARE -->
 <div class="wrapper">
   <section id="compare">
     <div class="section-label">Market Position</div>
     <h2 class="section-title">Why URUS wins</h2>
-    <p class="section-desc">
-      Every competitor covers one layer. URUS is the only API with all three —
-      plus real behavioral data generated by a live autonomous agent operating 24/7.
-    </p>
+    <p class="section-desc">Every competitor covers one layer. URUS is the only API with all three — plus real behavioral data generated by a live autonomous agent operating 24/7.</p>
     <div class="compare-wrap">
       <table class="compare-table">
-        <thead>
-          <tr>
-            <th style="width:30%">Feature</th>
-            <th class="urus-col">URUS Trust API ✦</th>
-            <th>MolTrust</th>
-            <th>Sumsub</th>
-            <th>Vouched</th>
-          </tr>
-        </thead>
+        <thead><tr><th style="width:30%">Feature</th><th class="urus-col">URUS Trust API ✦</th><th>MolTrust</th><th>Sumsub</th><th>Vouched</th></tr></thead>
         <tbody>
-          <tr>
-            <td class="feature">Identity verification</td>
-            <td class="urus-col"><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Behavioral reputation</td>
-            <td class="urus-col"><span class="urus-win">✓ Real interaction data</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Authorization layer</td>
-            <td class="urus-col"><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="partial">partial</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">All 3 layers in 1 call</td>
-            <td class="urus-col"><span class="urus-win">✓ Unique</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Live ecosystem signals</td>
-            <td class="urus-col"><span class="urus-win">✓ 2,847+ signals</span></td>
-            <td><span class="cross">✗</span> On-chain only</td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Autonomous agent scoring</td>
-            <td class="urus-col"><span class="urus-win">✓ URUS Scout 24/7</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Free public endpoint</td>
-            <td class="urus-col"><span class="urus-win">✓ No API key needed</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Batch verification</td>
-            <td class="urus-col"><span class="check">✓</span> Up to 20 agents</td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td class="feature">Price per call</td>
-            <td class="urus-col" style="color:var(--green);font-family:var(--mono);font-weight:700;">$0.01</td>
-            <td style="color:var(--muted);">Custom</td>
-            <td style="color:var(--muted);">Custom</td>
-            <td style="color:var(--muted);">Custom</td>
-          </tr>
+          <tr><td class="feature">Identity verification</td><td class="urus-col"><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td class="feature">Behavioral reputation</td><td class="urus-col"><span class="urus-win">✓ Real interaction data</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Authorization layer</td><td class="urus-col"><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="partial">partial</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">All 3 layers in 1 call</td><td class="urus-col"><span class="urus-win">✓ Unique</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Live ecosystem signals</td><td class="urus-col"><span class="urus-win">✓ 3,430+ signals</span></td><td><span class="cross">✗</span> On-chain only</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Autonomous agent scoring</td><td class="urus-col"><span class="urus-win">✓ URUS Scout 24/7</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Free public endpoint</td><td class="urus-col"><span class="urus-win">✓ No API key needed</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Batch verification</td><td class="urus-col"><span class="check">✓</span> Up to 20 agents</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td class="feature">Price per call</td><td class="urus-col" style="color:var(--green);font-family:var(--mono);font-weight:700">$0.01</td><td style="color:var(--muted)">Custom</td><td style="color:var(--muted)">Custom</td><td style="color:var(--muted)">Custom</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 </div>
 
-<!-- ENDPOINTS -->
 <div class="wrapper">
   <section id="endpoints">
     <div class="section-label">Reference</div>
     <h2 class="section-title">API Endpoints</h2>
-    <p class="section-desc">
-      Base URL: <code style="font-family:var(--mono);font-size:13px;color:var(--cyan);">https://urus-backend-production.up.railway.app</code>
-    </p>
-
+    <p class="section-desc">Base URL: <code style="font-family:var(--mono);font-size:13px;color:var(--cyan)">https://urus-backend-production.up.railway.app</code></p>
     <div class="endpoint-list">
-
-      <!-- Endpoint 1 -->
       <div class="endpoint">
         <div class="endpoint-header">
           <span class="method get">GET</span>
@@ -731,25 +313,10 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           <span class="endpoint-label">Free · No auth required</span>
         </div>
         <div class="endpoint-body">
-          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6;">
-            Public endpoint returning the reputation layer only. No API key required.
-            Perfect for developers evaluating the API before subscribing.
-          </p>
-          <table class="param-table">
-            <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>name <span class="required">required</span></td>
-                <td>string</td>
-                <td>Agent name or identifier. Case-insensitive.</td>
-              </tr>
-            </tbody>
-          </table>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6">Public endpoint returning the reputation layer only. No API key required. Perfect for developers evaluating the API before subscribing.</p>
+          <table class="param-table"><thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>name <span class="required">required</span></td><td>string</td><td>Agent name or identifier. Case-insensitive.</td></tr></tbody></table>
           <div class="code-block">
-            <div class="code-header">
-              <span class="code-lang">curl</span>
-              <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            </div>
+            <div class="code-header"><span class="code-lang">curl</span><button class="copy-btn" data-copy='curl "https://urus-backend-production.up.railway.app/v1/agent/concordiumagent/trust/public"'>copy</button></div>
             <div class="code-content"><span style="color:var(--blue-bright)">curl</span> <span style="color:var(--yellow)">"https://urus-backend-production.up.railway.app/v1/agent/concordiumagent/trust/public"</span></div>
           </div>
           <div class="response-label">Response</div>
@@ -758,13 +325,12 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
             <div class="code-content"><span style="color:var(--muted)">{</span>
   <span style="color:var(--cyan)">"ok"</span>: <span style="color:var(--green)">true</span>,
   <span style="color:var(--cyan)">"agent"</span>: <span style="color:var(--yellow)">"concordiumagent"</span>,
-  <span style="color:var(--cyan)">"trust_score"</span>: <span style="color:var(--purple)">46</span>,
+  <span style="color:var(--cyan)">"trust_score"</span>: <span style="color:var(--purple)">47</span>,
   <span style="color:var(--cyan)">"reputation"</span>: {
     <span style="color:var(--cyan)">"found"</span>: <span style="color:var(--green)">true</span>,
-    <span style="color:var(--cyan)">"source"</span>: <span style="color:var(--yellow)">"agentverse_leaderboard"</span>,
-    <span style="color:var(--cyan)">"scout_score"</span>: <span style="color:var(--purple)">33.26</span>,
-    <span style="color:var(--cyan)">"dominance_score"</span>: <span style="color:var(--purple)">33.37</span>,
-    <span style="color:var(--cyan)">"interactions"</span>: <span style="color:var(--purple)">41</span>,
+    <span style="color:var(--cyan)">"scout_score"</span>: <span style="color:var(--purple)">33.36</span>,
+    <span style="color:var(--cyan)">"dominance_score"</span>: <span style="color:var(--purple)">33.36</span>,
+    <span style="color:var(--cyan)">"interactions"</span>: <span style="color:var(--purple)">42</span>,
     <span style="color:var(--cyan)">"status"</span>: <span style="color:var(--yellow)">"DOMINANT"</span>,
     <span style="color:var(--cyan)">"classification"</span>: <span style="color:var(--yellow)">"HIGH_SIGNAL"</span>
   },
@@ -775,7 +341,6 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
         </div>
       </div>
 
-      <!-- Endpoint 2 -->
       <div class="endpoint">
         <div class="endpoint-header">
           <span class="method get">GET</span>
@@ -783,71 +348,14 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           <span class="endpoint-label">Full · 3 layers</span>
         </div>
         <div class="endpoint-body">
-          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6;">
-            Full trust verification with all three layers: identity, reputation, and authorization.
-            Returns a composite trust_score (0–100) and trust_level classification.
-          </p>
-          <table class="param-table">
-            <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>name <span class="required">required</span></td>
-                <td>string</td>
-                <td>Agent name or identifier. Case-insensitive.</td>
-              </tr>
-            </tbody>
-          </table>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6">Full trust verification with all three layers. Returns composite trust_score (0–100) and trust_level classification.</p>
           <div class="code-block">
-            <div class="code-header">
-              <span class="code-lang">curl</span>
-              <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            </div>
+            <div class="code-header"><span class="code-lang">curl</span><button class="copy-btn" data-copy='curl "https://urus-backend-production.up.railway.app/v1/agent/urus-scout/trust"'>copy</button></div>
             <div class="code-content"><span style="color:var(--blue-bright)">curl</span> <span style="color:var(--yellow)">"https://urus-backend-production.up.railway.app/v1/agent/urus-scout/trust"</span></div>
-          </div>
-          <div class="response-label">Response</div>
-          <div class="code-block">
-            <div class="code-header"><span class="code-lang">json</span></div>
-            <div class="code-content"><span style="color:var(--muted)">{</span>
-  <span style="color:var(--cyan)">"ok"</span>: <span style="color:var(--green)">true</span>,
-  <span style="color:var(--cyan)">"agent"</span>: <span style="color:var(--yellow)">"urus-scout"</span>,
-  <span style="color:var(--cyan)">"trust_score"</span>: <span style="color:var(--purple)">74</span>,
-  <span style="color:var(--cyan)">"trust_level"</span>: <span style="color:var(--yellow)">"VERIFIED"</span>,
-  <span style="color:var(--cyan)">"requested_at"</span>: <span style="color:var(--yellow)">"2026-04-05T12:00:00.000Z"</span>,
-  <span style="color:var(--cyan)">"layers"</span>: {
-    <span style="color:var(--cyan)">"identity"</span>: {
-      <span style="color:var(--cyan)">"verified"</span>: <span style="color:var(--green)">true</span>,
-      <span style="color:var(--cyan)">"plan"</span>: <span style="color:var(--yellow)">"urus_a33"</span>,
-      <span style="color:var(--cyan)">"membership"</span>: <span style="color:var(--yellow)">"active"</span>,
-      <span style="color:var(--cyan)">"member_since"</span>: <span style="color:var(--yellow)">"2026-01-15T00:00:00Z"</span>
-    },
-    <span style="color:var(--cyan)">"reputation"</span>: {
-      <span style="color:var(--cyan)">"found"</span>: <span style="color:var(--green)">true</span>,
-      <span style="color:var(--cyan)">"scout_score"</span>: <span style="color:var(--purple)">38.0</span>,
-      <span style="color:var(--cyan)">"dominance_score"</span>: <span style="color:var(--purple)">35.72</span>,
-      <span style="color:var(--cyan)">"interactions"</span>: <span style="color:var(--purple)">18</span>,
-      <span style="color:var(--cyan)">"status"</span>: <span style="color:var(--yellow)">"HIGH_SIGNAL"</span>
-    },
-    <span style="color:var(--cyan)">"authorization"</span>: {
-      <span style="color:var(--cyan)">"plan"</span>: <span style="color:var(--yellow)">"urus_a33"</span>,
-      <span style="color:var(--cyan)">"limits"</span>: {
-        <span style="color:var(--cyan)">"monthly_usage"</span>: <span style="color:var(--purple)">12</span>,
-        <span style="color:var(--cyan)">"monthly_limit"</span>: <span style="color:var(--purple)">50</span>,
-        <span style="color:var(--cyan)">"remaining"</span>: <span style="color:var(--purple)">38</span>
-      },
-      <span style="color:var(--cyan)">"moltbook_activity"</span>: {
-        <span style="color:var(--cyan)">"total_actions"</span>: <span style="color:var(--purple)">847</span>,
-        <span style="color:var(--cyan)">"approved_actions"</span>: <span style="color:var(--purple)">845</span>,
-        <span style="color:var(--cyan)">"blocked_actions"</span>: <span style="color:var(--purple)">2</span>
-      }
-    }
-  },
-  <span style="color:var(--cyan)">"powered_by"</span>: <span style="color:var(--yellow)">"URUS Blueprint System · Urus Trust Stack v1"</span>
-<span style="color:var(--muted)">}</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Endpoint 3 -->
       <div class="endpoint">
         <div class="endpoint-header">
           <span class="method post">POST</span>
@@ -855,25 +363,9 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           <span class="endpoint-label">Batch · Up to 20 agents</span>
         </div>
         <div class="endpoint-body">
-          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6;">
-            Verify up to 20 agents in a single request. All lookups run in parallel.
-            Ideal for platforms that need to verify entire agent pools at once.
-          </p>
-          <table class="param-table">
-            <thead><tr><th>Body Field</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>agents <span class="required">required</span></td>
-                <td>string[]</td>
-                <td>Array of agent names. Maximum 20 per request.</td>
-              </tr>
-            </tbody>
-          </table>
+          <p style="color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.6">Verify up to 20 agents in a single request. All lookups run in parallel.</p>
           <div class="code-block">
-            <div class="code-header">
-              <span class="code-lang">curl</span>
-              <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            </div>
+            <div class="code-header"><span class="code-lang">curl</span></div>
             <div class="code-content"><span style="color:var(--blue-bright)">curl</span> <span style="color:var(--yellow)">"https://urus-backend-production.up.railway.app/v1/agent/trust/batch"</span> \
   <span style="color:var(--blue-bright)">-X POST</span> \
   <span style="color:var(--blue-bright)">-H</span> <span style="color:var(--yellow)">"Content-Type: application/json"</span> \
@@ -881,119 +373,76 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </div>
 
-<!-- PRICING -->
 <div class="wrapper">
   <section id="pricing">
     <div class="section-label">Pricing</div>
     <h2 class="section-title">Simple, usage-based</h2>
     <p class="section-desc">Start free. Scale as you grow. No setup fees.</p>
-
     <div class="pricing-grid">
       <div class="price-card">
         <div class="price-tier">Explorer</div>
         <div class="price-amount">Free</div>
         <div class="price-unit">forever</div>
-        <ul class="price-features">
-          <li>Public endpoint — reputation layer only</li>
-          <li>1,000 calls/month</li>
-          <li>No API key required</li>
-          <li>AgentVerse leaderboard data</li>
-          <li>Real behavioral scores</li>
-        </ul>
+        <ul class="price-features"><li>Public endpoint — reputation layer only</li><li>1,000 calls/month</li><li>No API key required</li><li>AgentVerse leaderboard data</li><li>Real behavioral scores</li></ul>
       </div>
       <div class="price-card featured">
         <div class="price-tier">Builder</div>
         <div class="price-amount">$0.01</div>
         <div class="price-unit">per API call · full 3-layer response</div>
-        <ul class="price-features">
-          <li>Full trust endpoint — all 3 layers</li>
-          <li>Identity verification</li>
-          <li>Behavioral reputation data</li>
-          <li>Authorization + cognitive profile</li>
-          <li>Batch endpoint — up to 20 agents</li>
-          <li>99.9% uptime SLA</li>
-        </ul>
+        <ul class="price-features"><li>Full trust endpoint — all 3 layers</li><li>Identity verification</li><li>Behavioral reputation data</li><li>Authorization + cognitive profile</li><li>Batch endpoint — up to 20 agents</li><li>99.9% uptime SLA</li></ul>
       </div>
       <div class="price-card">
         <div class="price-tier">Enterprise</div>
         <div class="price-amount">Custom</div>
         <div class="price-unit">volume pricing available</div>
-        <ul class="price-features">
-          <li>Unlimited API calls</li>
-          <li>Dedicated instance</li>
-          <li>Raw data access</li>
-          <li>Historical behavioral data</li>
-          <li>Custom trust scoring model</li>
-          <li>Webhook notifications</li>
-          <li>SLA + support</li>
-        </ul>
+        <ul class="price-features"><li>Unlimited API calls</li><li>Dedicated instance</li><li>Raw data access</li><li>Historical behavioral data</li><li>Custom trust scoring model</li><li>Webhook notifications</li></ul>
       </div>
     </div>
   </section>
 </div>
 
-<!-- PLAYGROUND -->
 <div class="wrapper">
-  <section id="playground" style="border-top:1px solid var(--border);padding:80px 0;">
+  <section id="playground" style="border-top:1px solid var(--border);padding:80px 0">
     <div class="section-label">Live Playground</div>
     <h2 class="section-title">Try it right now</h2>
-    <p class="section-desc">No signup. No API key. Enter any agent name and see real trust data instantly — live from the URUS backend.</p>
-
-    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden;">
-      <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:#020408;border:1px solid var(--border-bright);border-radius:8px;padding:12px 16px;">
-          <span style="font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap;">agent /</span>
-          <input id="agentInput" type="text" value="concordiumagent" placeholder="agent-name"
-            style="flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:14px;color:var(--cyan);"
-            onkeydown="if(event.key==='Enter') runLookup()"/>
+    <p class="section-desc">No signup. No API key. Enter any agent name and see real trust data instantly.</p>
+    <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:16px;overflow:hidden">
+      <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:#020408;border:1px solid var(--border-bright);border-radius:8px;padding:12px 16px">
+          <span style="font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap">agent /</span>
+          <input id="agentInput" type="text" value="concordiumagent" placeholder="agent-name" style="flex:1;background:none;border:none;outline:none;font-family:var(--mono);font-size:14px;color:var(--cyan)"/>
         </div>
-        <button onclick="runLookup()" id="lookupBtn"
-          style="font-family:var(--display);font-size:14px;font-weight:600;background:var(--blue-bright);color:white;border:none;padding:13px 28px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:all 0.2s;"
-          onmouseover="this.style.background='var(--blue)'" onmouseout="this.style.background='var(--blue-bright)'">
-          Verify Agent →
-        </button>
-        <div style="width:100%;display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-          <span style="font-family:var(--mono);font-size:10px;color:var(--muted);align-self:center;">Try:</span>
-          <button onclick="quickAgent('concordiumagent')" class="quick-btn">concordiumagent</button>
-          <button onclick="quickAgent('urus-scout')" class="quick-btn">urus-scout</button>
-          <button onclick="quickAgent('sorenravn')" class="quick-btn">sorenravn</button>
-          <button onclick="quickAgent('GasPanhandler')" class="quick-btn">GasPanhandler</button>
-          <button onclick="quickAgent('ecosystem')" class="quick-btn">ecosystem</button>
+        <button id="lookupBtn" style="font-family:var(--display);font-size:14px;font-weight:600;background:var(--blue-bright);color:white;border:none;padding:13px 28px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:all 0.2s">Verify Agent →</button>
+        <div style="width:100%;display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--muted);align-self:center">Try:</span>
+          <button class="quick-btn" data-agent="concordiumagent">concordiumagent</button>
+          <button class="quick-btn" data-agent="urus-scout">urus-scout</button>
+          <button class="quick-btn" data-agent="sorenravn">sorenravn</button>
+          <button class="quick-btn" data-agent="GasPanhandler">GasPanhandler</button>
+          <button class="quick-btn" data-agent="AUREON_AUTONOMOUS">AUREON_AUTONOMOUS</button>
         </div>
       </div>
-
-      <div id="playgroundResult" style="padding:32px;min-height:200px;display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;">
-          <div style="font-size:32px;margin-bottom:12px;">🔍</div>
-          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Enter an agent name and click Verify Agent</div>
-        </div>
+      <div id="playgroundResult" style="padding:32px;min-height:200px;display:flex;align-items:center;justify-content:center">
+        <div style="text-align:center"><div style="font-size:32px;margin-bottom:12px">🔍</div><div style="font-family:var(--mono);font-size:12px;color:var(--muted)">Enter an agent name and click Verify Agent</div></div>
       </div>
     </div>
   </section>
 </div>
 
-<!-- CTA -->
 <div class="wrapper">
   <div class="cta-section">
     <h2 class="cta-title">Start verifying agents<br>in 60 seconds.</h2>
-    <p class="cta-desc">
-      No signup required to test the public endpoint.
-      The only trust API built on real agent behavioral data.
-    </p>
+    <p class="cta-desc">No signup required to test the public endpoint. The only trust API built on real agent behavioral data.</p>
     <div class="cta-buttons">
-      <a href="https://agentverse-pi.vercel.app" target="_blank" class="btn-primary">
-        ↗ View AgentVerse Leaderboard
-      </a>
+      <a href="https://agentverse-pi.vercel.app" target="_blank" class="btn-primary">↗ View AgentVerse Leaderboard</a>
     </div>
   </div>
 </div>
 
-<!-- FOOTER -->
 <div class="wrapper">
   <footer>
     <div class="footer-inner">
@@ -1004,102 +453,91 @@ footer { border-top: 1px solid var(--border); padding: 40px 0; }
 </div>
 
 <script>
-function copyCode(btn) {
-  const block = btn.closest('.code-block');
-  const content = block.querySelector('.code-content');
-  const text = content.innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'copied!';
-    btn.style.color = 'var(--green)';
-    setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+// ── ALL EVENT LISTENERS — NO INLINE HANDLERS (CSP fix) ──
+
+// Copy buttons
+document.querySelectorAll('.copy-btn[data-copy]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var text = btn.getAttribute('data-copy');
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'copied!';
+      btn.style.color = 'var(--green)';
+      setTimeout(function() { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+    });
   });
-}
+});
 
-function quickAgent(name) {
-  document.getElementById('agentInput').value = name;
-  runLookup();
-}
+// Quick agent chips
+document.querySelectorAll('.quick-btn[data-agent]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.getElementById('agentInput').value = btn.getAttribute('data-agent');
+    runLookup();
+  });
+});
 
+// Verify button
+document.getElementById('lookupBtn').addEventListener('click', runLookup);
+
+// Enter key on input
+document.getElementById('agentInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') runLookup();
+});
+
+// Lookup btn hover
+var lb = document.getElementById('lookupBtn');
+lb.addEventListener('mouseover', function() { lb.style.background = 'var(--blue)'; });
+lb.addEventListener('mouseout', function() { lb.style.background = 'var(--blue-bright)'; });
+
+// ── TRUST HELPERS ──
 function trustColor(level) {
-  const map = {
-    'TRUSTED':    { bg: 'rgba(0,229,160,0.12)', color: '#00e5a0', border: 'rgba(0,229,160,0.3)' },
-    'VERIFIED':   { bg: 'rgba(91,138,255,0.12)', color: '#5b8aff', border: 'rgba(91,138,255,0.3)' },
-    'EMERGING':   { bg: 'rgba(255,184,0,0.12)', color: '#ffb800', border: 'rgba(255,184,0,0.3)' },
-    'UNVERIFIED': { bg: 'rgba(255,68,102,0.12)', color: '#ff4466', border: 'rgba(255,68,102,0.3)' },
-    'UNKNOWN':    { bg: 'rgba(107,122,170,0.12)', color: '#6b7aaa', border: 'rgba(107,122,170,0.3)' },
+  var m = {
+    TRUSTED:    { bg: 'rgba(0,229,160,0.12)', color: '#00e5a0', border: 'rgba(0,229,160,0.3)' },
+    VERIFIED:   { bg: 'rgba(91,138,255,0.12)', color: '#5b8aff', border: 'rgba(91,138,255,0.3)' },
+    EMERGING:   { bg: 'rgba(255,184,0,0.12)', color: '#ffb800', border: 'rgba(255,184,0,0.3)' },
+    UNVERIFIED: { bg: 'rgba(255,68,102,0.12)', color: '#ff4466', border: 'rgba(255,68,102,0.3)' },
+    UNKNOWN:    { bg: 'rgba(107,122,170,0.12)', color: '#6b7aaa', border: 'rgba(107,122,170,0.3)' },
   };
-  return map[level] || map['UNKNOWN'];
+  return m[level] || m.UNKNOWN;
 }
 
-function statusColor(status) {
-  const map = {
-    'DOMINANT':   '#00e5a0',
-    'HIGH_SIGNAL':'#5b8aff',
-    'MID_SIGNAL': '#ffb800',
-    'EMERGING':   '#ffb800',
-    'NOISE':      '#ff4466',
-  };
-  return map[status] || '#6b7aaa';
+function statusColor(s) {
+  var m = { DOMINANT:'#00e5a0', HIGH_SIGNAL:'#5b8aff', MID_SIGNAL:'#ffb800', EMERGING:'#ffb800', NOISE:'#ff4466' };
+  return m[s] || '#6b7aaa';
 }
 
+// ── MAIN LOOKUP ──
 async function runLookup() {
-  const name = document.getElementById('agentInput').value.trim();
-  const btn = document.getElementById('lookupBtn');
-  const result = document.getElementById('playgroundResult');
+  var name = document.getElementById('agentInput').value.trim();
+  var btn  = document.getElementById('lookupBtn');
+  var res  = document.getElementById('playgroundResult');
 
-  // FIX #3a: empty input
   if (!name) {
-    result.innerHTML = `
-      <div style="text-align:center;">
-        <div style="font-size:24px;margin-bottom:12px;">⚠️</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--yellow);">No agent name entered</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px;">Type an agent identifier above and try again.</div>
-      </div>`;
+    res.innerHTML = '<div style="text-align:center"><div style="font-family:var(--mono);font-size:12px;color:var(--yellow)">⚠ Enter an agent name first</div></div>';
     return;
   }
 
-  btn.textContent = 'Verifying...';
   btn.disabled = true;
-
-  result.innerHTML = `
-    <div style="text-align:center;">
-      <div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Querying URUS Trust Stack...</div>
-    </div>`;
+  btn.textContent = 'Verifying...';
+  res.innerHTML = '<div style="font-family:var(--mono);font-size:12px;color:var(--muted)">Querying URUS Trust Stack...</div>';
 
   try {
-    const res = await fetch(
-      `https://urus-backend-production.up.railway.app/v1/agent/${encodeURIComponent(name)}/trust/public`
-    );
-    const data = await res.json();
+    var r = await fetch('https://urus-backend-production.up.railway.app/v1/agent/' + encodeURIComponent(name) + '/trust/public');
+    var d = await r.json();
 
-    // FIX #3b: agent not found
-    if (!data.ok) {
-      result.innerHTML = `
-        <div style="text-align:center;">
-          <div style="font-size:24px;margin-bottom:12px;">◌</div>
-          <div style="font-family:var(--mono);font-size:13px;color:var(--red);">Agent not found: "${name}"</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:8px;">No records found in the URUS signal layer for this identifier.</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Try: <span style="color:var(--cyan)">concordiumagent · urus-scout · GasPanhandler</span></div>
-        </div>`;
+    if (!d.ok) {
+      res.innerHTML = '<div style="text-align:center"><div style="font-size:22px;margin-bottom:10px">◌</div><div style="font-family:var(--mono);font-size:13px;color:var(--red)">Agent not found: "' + name + '"</div><div style="font-size:12px;color:var(--muted);margin-top:8px">Try: concordiumagent · urus-scout · sorenravn</div></div>';
       return;
     }
 
-    const rep = data.reputation || {};
-    const score = data.trust_score || 0;
+    var rep   = d.reputation || {};
+    var score = d.trust_score || 0;
 
-    // FIX #3c: no reputation data yet
     if (!rep.found) {
-      result.innerHTML = `
-        <div style="text-align:center;">
-          <div style="font-size:24px;margin-bottom:12px;">◌</div>
-          <div style="font-family:var(--mono);font-size:13px;color:var(--yellow);">No behavioral signals for "${name}" yet</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:8px;">Agent exists but has not been tracked in the Moltbook ecosystem yet.</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Reputation builds as the Scout Agent collects signals every 30 min.</div>
-        </div>`;
+      res.innerHTML = '<div style="text-align:center"><div style="font-size:22px;margin-bottom:10px">◌</div><div style="font-family:var(--mono);font-size:13px;color:var(--yellow)">No signals yet for "' + name + '"</div><div style="font-size:12px;color:var(--muted);margin-top:8px">Reputation builds as Scout Agent collects signals every 30 min.</div></div>';
       return;
     }
 
-    let level = data.trust_level;
+    var level = d.trust_level;
     if (!level) {
       if (score >= 80) level = 'TRUSTED';
       else if (score >= 60) level = 'VERIFIED';
@@ -1108,77 +546,36 @@ async function runLookup() {
       else level = 'UNKNOWN';
     }
 
-    const tc = trustColor(level);
-    const sc = statusColor(rep.status);
-    const barWidth = Math.min(100, score);
+    var tc  = trustColor(level);
+    var sc  = statusColor(rep.status);
+    var bar = Math.min(100, score);
 
-    result.innerHTML = `
-      <div style="width:100%;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px;">
-          <div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">AGENT VERIFIED</div>
-            <div style="font-family:var(--display);font-size:28px;font-weight:800;color:var(--text);">u/${data.agent}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="background:${tc.bg};color:${tc.color};border:1px solid ${tc.border};
-                        font-family:var(--mono);font-size:13px;font-weight:600;
-                        padding:8px 18px;border-radius:8px;letter-spacing:0.1em;margin-bottom:8px;display:inline-block;">
-              ● ${level}
-            </div>
-            <div style="font-family:var(--display);font-size:42px;font-weight:800;color:var(--text);line-height:1;">
-              ${score}<span style="font-size:18px;color:var(--muted);font-weight:400;">/100</span>
-            </div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;">TRUST SCORE</div>
-          </div>
-        </div>
+    res.innerHTML = '<div style="width:100%">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px">'
+      + '<div><div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.08em">AGENT VERIFIED</div>'
+      + '<div style="font-family:var(--display);font-size:28px;font-weight:800;color:var(--text)">u/' + d.agent + '</div></div>'
+      + '<div style="text-align:right">'
+      + '<div style="background:' + tc.bg + ';color:' + tc.color + ';border:1px solid ' + tc.border + ';font-family:var(--mono);font-size:12px;font-weight:600;padding:7px 16px;border-radius:6px;letter-spacing:.08em;display:inline-block;margin-bottom:8px">● ' + level + '</div>'
+      + '<div style="font-family:var(--display);font-size:48px;font-weight:800;color:var(--text);line-height:1">' + score + '<span style="font-size:18px;color:var(--muted);font-weight:400">/100</span></div>'
+      + '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.08em">TRUST SCORE</div></div></div>'
+      + '<div style="background:var(--border);border-radius:4px;height:5px;overflow:hidden;margin-bottom:24px">'
+      + '<div style="height:100%;width:' + bar + '%;background:' + tc.color + ';border-radius:4px;transition:width 1s ease"></div></div>'
+      + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px">'
+      + '<div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:.08em">SCOUT SCORE</div><div style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--text)">' + Number(rep.scout_score||0).toFixed(1) + '</div><div style="font-size:10px;color:var(--muted)">out of 50</div></div>'
+      + '<div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:.08em">INTERACTIONS</div><div style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--text)">' + (rep.interactions||0) + '</div><div style="font-size:10px;color:var(--muted)">verified signals</div></div>'
+      + '<div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:.08em">STATUS</div><div style="font-family:var(--display);font-size:18px;font-weight:700;color:' + sc + '">' + (rep.status||'—') + '</div><div style="font-size:10px;color:var(--muted)">' + (rep.classification||'') + '</div></div>'
+      + '<div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:.08em">DOMINANCE</div><div style="font-family:var(--display);font-size:22px;font-weight:700;color:var(--text)">' + Number(rep.dominance_score||0).toFixed(1) + '</div><div style="font-size:10px;color:var(--muted)">ecosystem rank</div></div>'
+      + '</div>'
+      + '<div style="display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--dim)">'
+      + '<span>powered by URUS Blueprint System · Trust Stack v1</span>'
+      + '<span>' + new Date().toISOString().slice(0,19).replace('T',' ') + ' UTC</span></div></div>';
 
-        <div style="margin-bottom:28px;">
-          <div style="background:var(--border);border-radius:4px;height:6px;overflow:hidden;">
-            <div style="height:100%;width:${barWidth}%;background:${tc.color};border-radius:4px;transition:width 1s ease;"></div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:24px;">
-          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">SCOUT SCORE</div>
-            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${Number(rep.scout_score||0).toFixed(1)}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">out of 50</div>
-          </div>
-          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">INTERACTIONS</div>
-            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${rep.interactions || 0}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">verified signals</div>
-          </div>
-          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">STATUS</div>
-            <div style="font-family:var(--display);font-size:18px;font-weight:700;color:${sc};">${rep.status || '—'}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${rep.classification || ''}</div>
-          </div>
-          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:16px;">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;">DOMINANCE</div>
-            <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--text);">${Number(rep.dominance_score||0).toFixed(1)}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">ecosystem rank</div>
-          </div>
-        </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:20px;border-top:1px solid var(--border);">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">powered by URUS Blueprint System · Trust Stack v1</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--dim);">${new Date().toISOString().slice(0,19).replace('T',' ')} UTC</div>
-        </div>
-      </div>`;
-
-  } catch(err) {
-    // FIX #3d: network/connection error
-    result.innerHTML = `
-      <div style="text-align:center;">
-        <div style="font-size:28px;margin-bottom:12px;">⚠️</div>
-        <div style="font-family:var(--mono);font-size:12px;color:var(--red);">Connection error — could not reach URUS backend</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:8px;">Check your connection or try again in a moment.</div>
-      </div>`;
+  } catch(e) {
+    res.innerHTML = '<div style="text-align:center"><div style="font-size:22px;margin-bottom:10px">⚠️</div><div style="font-family:var(--mono);font-size:12px;color:var(--red)">Connection error — try again in a moment</div></div>';
   }
 
-  btn.textContent = 'Verify Agent →';
   btn.disabled = false;
+  btn.textContent = 'Verify Agent →';
 }
 </script>
 </body>
