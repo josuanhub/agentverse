@@ -546,10 +546,8 @@ async function load() {
       if (stRes.ok) {
         const stData = await stRes.json();
         // contar señales desde recent_memory
-        const mem = Array.isArray(stData.recent_memory) ? stData.recent_memory : [];
-        state.totalSignals = mem.length > 0
-          ? mem.length * 8
-          : state.agents.reduce((s, a) => s + a.interactions, 0);
+        state.totalSignals = stData.total_signals ||
+          state.agents.reduce((s, a) => s + a.interactions, 0);
       }
     } catch (_) {
       state.totalSignals = state.agents.reduce((s, a) => s + a.interactions, 0);
