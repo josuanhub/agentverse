@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://urus-backend-production.up.railway.app/sitemap.xml"
+      "destination": "https://urus-backend-production.up.railway.app/sitemap.xml?domain=agentverse.biz"
     },
     {
       "source": "/robots.txt",
-      "destination": "https://urus-backend-production.up.railway.app/robots.txt"
+      "destination": "https://urus-backend-production.up.railway.app/robots.txt?domain=agentverse.biz"
     }
   ]
 }
